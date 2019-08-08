@@ -1,0 +1,225 @@
+@import './mixin.scss';
+@import './variables.scss';
+@import './sidebar.scss';
+@import './btn.scss';
+
+body,html {
+  line-height: 1em;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  // font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+  // user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: $bodyColor;
+  color: $black;
+  font-size: 14px;
+}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,
+cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,
+ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,
+embed,figure,figcaption,footer,header,menu,nav,output,ruby,section,summary,time,mark,audio,video,input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: normal;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,aside,details,figcaption,figure,footer,header,menu,nav,section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+blockquote,q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* custom */
+a {
+  color: #7e8c8d;
+  -webkit-backface-visibility: hidden;
+  text-decoration: none;
+}
+li {
+  list-style: none;
+}
+body {
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.fl{ float: left; }
+.fr{ float: right; }
+.mt{ margin-top: 20px; }
+.mr{ margin-right: 20px; }
+.mb{ margin-bottom: 20px; }
+.ml{ margin-left: 20px; }
+.mb1{ margin-bottom: 10px; }
+.m0{ margin: 0!important; }
+.pt{ padding-top: 20px; }
+.pr{ padding-right: 20px; }
+.pb{ padding-bottom: 20px; }
+.pl{ padding-left: 20px; }
+.p0{ padding: 0!important; }
+
+// 引用字体图标样式
+.svg-icon {
+  width: 24px;
+  height: 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.toolbar-bottom{
+    margin: 20px 0;
+}
+.sub-title{
+  margin-bottom: 20px;
+  line-height: 40px;
+}
+.sub-title h4{
+  font-size: 16px;
+}
+.list-detail .el-form-item {
+  margin-bottom: 0;
+}
+.list-small-detail {
+  .el-form-item {
+    margin-bottom: 0;
+    .el-form-item__label {
+      line-height: 24px;
+    }
+    .el-form-item__content {
+      line-height: 24px;
+    }
+  }
+}
+.form-submit{
+  margin-top: 40px;
+}
+.form-inside-row {
+  padding: 8px 0;
+  .el-row {
+    line-height: 24px;
+    overflow: hidden;
+  }
+}
+
+/*VueEditor */
+.plugins-tips {
+  padding: 20px 10px;
+  margin-bottom: 20px;
+}
+
+/*BaseTable*/
+.el-table th, .el-table tr, .el-table td {
+  text-align: center;
+}
+.hoveTitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*BaseTabs*/
+.el-tabs__content{
+  overflow: visible;
+}
+.el-tabs__header{
+  margin-bottom: 20px;
+}
+.el-tabs__item{
+  // font-size: 16px;
+}
+
+/*BaseForm*/
+.form-box {
+  width: 600px;
+}
+.form-box .line {
+  text-align: center;
+}
+.el-time-panel__content::after,
+.el-time-panel__content::before {
+  margin-top: -7px;
+}
+.el-time-spinner__wrapper .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
+  padding-bottom: 0;
+}
+.el-form-item__label {
+  padding-right: 2px;
+}
+
+/*collapse*/
+.el-collapse-item__header {
+  height: auto;
+  .el-collapse-item__wrap {
+    z-index: 1;
+  }
+}
+
+/*charts*/
+.data-empty {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, .7);
+  color: #888;
+  font-size: 14px;
+}
+
+/*sidebar*/
+.el-submenu__title icon {
+  color: $white !important;
+}
+.el-menu icon{
+  color: $white;
+}
+
+/*link*/
+.router-link-active {
+  color: $themeColor;
+}
+.toolbar .el-form-item {
+  margin-bottom: 14px;
+}
+
+
+/*nprogress*/
+#nprogress {
+  .bar-center {
+    max-width: 90%;
+    height: 16px;
+    border-radius: 100px;
+    background-color: $themeColor;
+    overflow: hidden;
+    vertical-align: middle;
+    .peg-center {
+      margin-right: 8px;
+      color: #fff;
+      text-align: right;
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
+}

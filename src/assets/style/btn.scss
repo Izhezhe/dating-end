@@ -1,0 +1,43 @@
+@import './variables.scss';
+
+@mixin colorBtn($color) {
+  border-color: $color;
+  background-color: $color;
+}
+
+.el-button--primary {
+  @include colorBtn($themeColor)
+}
+
+.el-tabs__item.is-active {
+  color: $themeColor;
+}
+
+.el-button+.el-button {
+  margin-left: 4px !important;
+}
+
+.my-switch /deep/ .el-switch__label {
+  position: absolute;
+  display: none;
+  color: #fff;
+}
+.my-switch /deep/ .el-switch__label--left {
+  z-index: 1;
+  left: 22px;
+}
+.my-switch /deep/ .el-switch__label--right {
+  z-index: 1;
+  left: 0px;
+}
+.my-switch /deep/ .el-switch__label.is-active {
+  display: block;
+}
+
+.el-radio-button__inner {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none!important;
+  border-radius: 4px!important;
+  background: $bodyColor;
+}
