@@ -2,27 +2,17 @@ import request from '@/utils/request'
 
 /**
  * 登录
- * @param {string} email 账号：manager@manager.com
- * @param {string} password 密码：1234Qwer
+ * @param {string} username 账号：admin
+ * @param {string} password 密码：123456
  */
-export function login(email, password) {
+export function login(username, password) {
   return request({
-    url: '/api/login',
+    url: '/user/login',
     method: 'post',
     data: {
-      email,
+      username,
       password
     }
-  })
-}
-
-/**
- * 获取客户信息
- */
-export function getInfo() {
-  return request({
-    url: '/api/detail',
-    method: 'get'
   })
 }
 

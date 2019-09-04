@@ -1,4 +1,4 @@
-import { login, resetPass, getInfo, logout, register } from '@/api/login'
+import { login, resetPass, logout, register } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { setStore, getStore, removeStore } from '@/utils/store'
 const user = {
@@ -7,30 +7,31 @@ const user = {
     id: 0,
     name: '',
     avatar: '',
+    roles: '',
     browserHeaderTitle: getStore({
       name: 'browserHeaderTitle'
     }) || '业务管理'
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
+    SET_TOKEN: (state, val) => {
+      state.token = val
     },
-    SET_ID: (state, id) => {
-      state.id = id
+    SET_ID: (state, val) => {
+      state.id = val
     },
-    SET_NAME: (state, name) => {
-      state.name = name
+    SET_NAME: (state, val) => {
+      state.name = val
     },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
+    SET_AVATAR: (state, val) => {
+      state.avatar = val
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_ROLES: (state, val) => {
+      state.roles = val
     },
-    SET_BROWSERHEADERTITLE: (state, action) => {
-      state.browserHeaderTitle = action.browserHeaderTitle
-    }
+    SET_BROWSERHEADERTITLE: (state, val) => {
+      state.browserHeaderTitle = val.browserHeaderTitle
+    },
 
   },
 
@@ -40,25 +41,25 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
-          const data = response.data
+          const data = response.datas
           setToken(data.token)
           commit('SET_TOKEN', data.token)
+          commit('SET_ID', data.userDetail.id)
+          commit('SET_NAME', data.userDetail.name)
+          commit('SET_ROLES', data.userDetail.role)
+          setStore({
+            name: 'id',
+            content: data.userDetail.id
+          })
+          setStore({
+            name: 'name',
+            content: data.userDetail.name
+          })
+          setStore({
+            name: 'role',
+            content: data.userDetail.role
+          })
           resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 获取用户信息
-    GetInfo({ commit }) {
-      return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const data = response.data.user
-          commit('SET_ID', data.id)
-          commit('SET_NAME', data.name)
-          // commit('SET_AVATAR', data.avatar)
-          resolve(data)
         }).catch(error => {
           reject(error)
         })

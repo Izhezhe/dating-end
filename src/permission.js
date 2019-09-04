@@ -17,23 +17,9 @@ router.beforeEach((to, from, next) => {
     })
     if (to.path === '/login') {
       next({ path: '/' })
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      NProgress.done()
     } else {
-      if (!store.getters.name) {
-        store.dispatch('GetInfo').then(res => { // 拉取用户信息
-          store.dispatch('GenerateRoutes').then(() => { // 根据roles权限生成可访问的路由表
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          })
-        }).catch((err) => {
-          store.dispatch('FedLogOut').then(() => {
-            Message.error(err || 'Verification failed, please login again')
-            next({ path: '/' })
-          })
-        })
-      } else {
-        next()
-      }
+      next()
     }
   } else {
     // 设置浏览器头部标题
@@ -41,7 +27,7 @@ router.beforeEach((to, from, next) => {
     store.commit('SET_BROWSERHEADERTITLE', {
       browserHeaderTitle: browserHeaderTitle
     })
-    if (whiteList.indexOf(to.path) !== -1 || to.path == '/register') {
+    if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
       next('/login')

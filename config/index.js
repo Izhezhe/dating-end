@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apis': {
-        target: 'http://manager.lequncare.com',
+        target: 'http://sys.zhzhao.top',
         changeOrigin: true,
         pathRewrite: {
           '^/apis': ''
