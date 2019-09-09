@@ -45,7 +45,7 @@ const user = {
           setToken(data.token)
           commit('SET_TOKEN', data.token)
           commit('SET_ID', data.userDetail.id)
-          commit('SET_NAME', data.userDetail.name)
+          commit('SET_NAME', data.userDetail.username)
           commit('SET_ROLES', data.userDetail.role)
           setStore({
             name: 'id',
@@ -53,7 +53,7 @@ const user = {
           })
           setStore({
             name: 'name',
-            content: data.userDetail.name
+            content: data.userDetail.username
           })
           setStore({
             name: 'role',

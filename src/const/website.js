@@ -1,7 +1,7 @@
 export default {
-  title: '业管',
-  logo: 'S',
-  author: 'BY 旺财保',
+  title: '管理',
+  logo: 'L',
+  author: 'BY lizz',
   whiteList: ['/login', '/404', '/401'],
   
 }

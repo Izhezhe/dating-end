@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar wrapClass="scrollbar-wrapper">
     <logo :isCollapse="isCollapse"></logo>
-    <el-menu
+    <!-- <el-menu
       mode="vertical"
       router
       :show-timeout="200"
@@ -11,8 +11,18 @@
       text-color="#fff"
       active-text-color="#00b4ff"
     >
-      <!-- :unique-opened="true" -->
       <sidebar-item :routes="permission_routers"></sidebar-item>
+    </el-menu> -->
+    <el-menu
+      mode="vertical"
+      :collapse="isCollapse"
+      :default-active="defaultActive"
+      ref="menu"
+      @select="handleMenuSelect">
+      <template v-for="(menu, menuIndex) in permission_routers">
+        <zz-menu-item v-if="menu.childrens.length === 0" :menu="menu" :key="menuIndex"/>
+        <zz-menu-sub v-else :menu="menu" :key="menuIndex"/>
+      </template>
     </el-menu>
   </el-scrollbar>
 </template>
@@ -22,7 +32,12 @@ import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import logo from './logo'
 export default {
-  components: { SidebarItem, logo },
+  components: { 
+    SidebarItem, 
+    logo,
+    'zz-menu-item': () => import('./menuItem'),
+    'zz-menu-sub': () => import('./menuSub')
+  },
   computed: {
     ...mapGetters([
       'sidebar',
