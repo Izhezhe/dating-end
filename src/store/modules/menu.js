@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { getRouters } from '@/api/login'
+import { getMenu } from '@/api/login'
 
 const menu = {
   state: {
@@ -30,7 +30,7 @@ const menu = {
       state.device = device
     },
     SET_ROUTERS: (state, routers) => {
-      state.routers = routers.childrens
+      state.routers = routers
     }
   },
   actions: {
@@ -43,15 +43,15 @@ const menu = {
     ToggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
     },
-    GenerateRoutes({ commit, rootGetters }, role) {
+    GenerateRoutes({ commit, rootGetters }) {
       return new Promise(resolve => {
-        commit('SET_ROUTERS', rootGetters.website.router)
-        resolve()
-        // getRouters(role).then(response => {
-        //   const data = response.datas
-        //   commit('SET_ROUTERS', data.childrens)
-        //   resolve()
-        // })
+        // commit('SET_ROUTERS', rootGetters.website.router.childrens) // 测试数据
+        // resolve()
+        getMenu().then(response => {
+          const data = response.datas
+          commit('SET_ROUTERS', data.childrens)
+          resolve(data.childrens)
+        })
       })
     }
   }

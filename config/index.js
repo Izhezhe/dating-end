@@ -12,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apis': {
-        target: 'http://sys.zhzhao.top',
+        // target: 'http://sys.zhzhao.top',
+        target: 'http://localhost:7475',
         changeOrigin: true,
         pathRewrite: {
           '^/apis': ''

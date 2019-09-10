@@ -59,12 +59,9 @@ export function register(data) {
  * 获取路由
  * @param {code} 角色
  */
-export function getRouters(code) {
+export function getMenu() {
   return request({
-    url: '',
-    method: 'post',
-    data: {
-      code
-    }
+    url: '/sys/menu/all',
+    method: 'get',
   })
 }

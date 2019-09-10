@@ -29,12 +29,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getMenu } from '@/api/login'
 import SidebarItem from './SidebarItem'
 import logo from './logo'
 export default {
   data() {
     return {
-      
+      routers: []
     }
   },
   components: { 
@@ -45,7 +46,12 @@ export default {
   },
   created() {
     this.getMenu();
-    // console.log(this.menu_routers)
+    console.log(this.menu_routers)
+    // getMenu().then(response => {
+    //   const data = response.datas
+    //   this.$store.commit('SET_ROUTERS', data.childrens)
+    //   this.routers = data.childrens
+    // })
   },
   computed: {
     ...mapGetters([
@@ -66,7 +72,7 @@ export default {
   },
   methods: {
     getMenu() {
-      this.$store.dispatch('GenerateRoutes', this.roles)
+      this.$store.dispatch('GenerateRoutes')
     }
   }
 }
