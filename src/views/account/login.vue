@@ -76,7 +76,7 @@ export default {
             } else {
               removeStore({name: 'password'})
             }
-            this.$router.push({ path: '/' })
+            this.$router.push({ path: '/index' })
           }).catch(() => {
             this.logining = false
           })

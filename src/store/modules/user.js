@@ -4,13 +4,11 @@ import { setStore, getStore, removeStore } from '@/utils/store'
 const user = {
   state: {
     token: getToken(),
-    id: 0,
-    name: '',
-    avatar: '',
-    roles: '',
-    browserHeaderTitle: getStore({
-      name: 'browserHeaderTitle'
-    }) || '业务管理'
+    id: getStore({ name: 'id' }) || '',
+    name: getStore({ name: 'name' }) || '',
+    avatar: getStore({ name: 'avatar' }) || '',
+    roles: getStore({ name: 'role' }) || '',
+    browserHeaderTitle: getStore({ name: 'browserHeaderTitle' }) || '业务管理'
   },
 
   mutations: {

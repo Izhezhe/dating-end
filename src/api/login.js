@@ -54,3 +54,17 @@ export function register(data) {
     data
   })
 }
+
+/**
+ * 获取路由
+ * @param {code} 角色
+ */
+export function getRouters(code) {
+  return request({
+    url: '',
+    method: 'post',
+    data: {
+      code
+    }
+  })
+}

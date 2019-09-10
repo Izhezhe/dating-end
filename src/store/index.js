@@ -1,16 +1,14 @@
-import app from './modules/app'
 import user from './modules/user'
+import menu from './modules/menu'
 import common from './modules/common'
-import permission from './modules/permission'
 import tagsView from './modules/tagsView'
 import getters from './getters'
 
 const store = new Vuex.Store({
   modules: {
-    app,
     user,
+    menu,
     common,
-    permission,
     tagsView,
   },
   getters

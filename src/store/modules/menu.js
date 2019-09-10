@@ -1,12 +1,15 @@
 import Cookies from 'js-cookie'
+import { getRouters } from '@/api/login'
 
-const app = {
+const menu = {
   state: {
     sidebar: {
       opened: !+Cookies.get('sidebarStatus'),
       withoutAnimation: false
     },
-    device: 'desktop'
+    device: 'desktop',
+    // 侧栏菜单
+    routers: [],
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -25,6 +28,9 @@ const app = {
     },
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
+    },
+    SET_ROUTERS: (state, routers) => {
+      state.routers = routers.childrens
     }
   },
   actions: {
@@ -36,9 +42,20 @@ const app = {
     },
     ToggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
+    },
+    GenerateRoutes({ commit, rootGetters }, role) {
+      return new Promise(resolve => {
+        commit('SET_ROUTERS', rootGetters.website.router)
+        resolve()
+        // getRouters(role).then(response => {
+        //   const data = response.datas
+        //   commit('SET_ROUTERS', data.childrens)
+        //   resolve()
+        // })
+      })
     }
   }
 
 }
 
-export default app
+export default menu

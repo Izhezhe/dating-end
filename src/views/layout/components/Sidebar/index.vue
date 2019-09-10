@@ -19,7 +19,7 @@
       :default-active="defaultActive"
       ref="menu"
       @select="handleMenuSelect">
-      <template v-for="(menu, menuIndex) in permission_routers">
+      <template v-for="(menu, menuIndex) in menu_routers">
         <zz-menu-item v-if="menu.childrens.length === 0" :menu="menu" :key="menuIndex"/>
         <zz-menu-sub v-else :menu="menu" :key="menuIndex"/>
       </template>
@@ -32,16 +32,26 @@ import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import logo from './logo'
 export default {
+  data() {
+    return {
+      
+    }
+  },
   components: { 
     SidebarItem, 
     logo,
     'zz-menu-item': () => import('./menuItem'),
     'zz-menu-sub': () => import('./menuSub')
   },
+  created() {
+    this.getMenu();
+    console.log(this.menu_routers)
+  },
   computed: {
     ...mapGetters([
+      'roles',
       'sidebar',
-      'permission_routers'
+      'menu_routers'
     ]),
     isCollapse() {
       return !this.sidebar.opened
@@ -52,6 +62,11 @@ export default {
       // console.log(arr)
       route = '/' + arr[1]
       return route
+    }
+  },
+  methods: {
+    getMenu() {
+      this.$store.dispatch('GenerateRoutes', this.roles)
     }
   }
 }
