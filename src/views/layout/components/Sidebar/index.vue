@@ -45,7 +45,7 @@ export default {
   },
   created() {
     this.getMenu();
-    console.log(this.menu_routers)
+    // console.log(this.menu_routers)
   },
   computed: {
     ...mapGetters([
