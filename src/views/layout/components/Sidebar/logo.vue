@@ -21,18 +21,26 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getMenu } from '@/api/login'
 export default {
   name: 'logo',
   data() {
     return {}
   },
   props: ['isCollapse'],
-  created() {},
   computed: {
     ...mapGetters(['website']),
     type: function(val) {
       return this.website.logo.indexOf('static') !== -1
     }
+  },
+  mounted() {
+    this.$store.dispatch('GenerateRoutes')
+    // getMenu().then(res => {
+    //   this.$store.commit('SET_ROUTERS', res.datas.childrens)
+    //   // console.log(res.datas.childrens)
+    //   // resolve(data.childrens)
+    // })
   },
   methods: {}
 }

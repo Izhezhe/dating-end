@@ -1,5 +1,5 @@
 <template>
-	<el-menu-item :index="menu.pageUrl || uniqueId">
+	<el-menu-item :index="menu.pageUrl">
 		<i v-if="menu.menuIcon" :class="`${menu.menuIcon}`"></i>
     <i v-else-if="menu.iconSvg">
       <icon :name="menu.iconSvg"></icon>
@@ -10,9 +10,9 @@
 </template>
 
 <script>
-	import { uniqueId } from 'lodash'
+	// import { uniqueId } from 'lodash'
 	export default {
-		name: 'd2-layout-header-aside-menu-item',
+		name: 'zz-menu-item',
 		props: {
 			menu: {
 				type: Object,
@@ -22,7 +22,7 @@
 		},
 		data() {
 			return {
-				uniqueId: uniqueId('d2-menu-empty-')
+				// uniqueId: uniqueId('d2-menu-empty-')
 			}
 		}
 	}

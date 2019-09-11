@@ -105,4 +105,20 @@
       transition: none;
     }
   }
+  // 菜单为空的时候显示的信息
+  .sidebar-menu-empty {
+    height: 160px;
+    margin: 10px;
+    margin-top: 0px;
+    border-radius: 4px;
+    user-select: none;
+    cursor: pointer;
+    i {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+    span {
+      font-size: 14px;
+    }
+  }
 }

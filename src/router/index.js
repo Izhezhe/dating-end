@@ -68,31 +68,31 @@ export default new VueRouter({
           component: () => import('@/views/index'),
           meta: {title: '首页', notCache: true},
         },
-        // {
-        //   path: 'index2',
-        //   name: 'index2',
-        //   component: () => import('@/views/index'),
-        //   meta: {meta, title: '首页', notCache: true},
-        // },
-        // {
-        //   path: 'index3',
-        //   name: 'index3',
-        //   component: () => import('@/views/index'),
-        //   meta: {meta, title: '首页', notCache: true},
-        // },
+        {
+          path: '/account',
+          name: 'account',
+          component: () => import('@/views/account'),
+          meta: {title: '账号管理', notCache: true},
+        },
+        {
+          path: '/user',
+          name: 'user',
+          component: () => import('@/views/user'),
+          meta: {title: '账号管理', notCache: true},
+        },
       ]
     },
     // 登陆
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/account/login'),
+      component: () => import('@/views/login/login'),
       meta: '登陆'
     },
     {
       path: '/reset',
       name: 'reset',
-      component: () => import('@/views/account/reset'),
+      component: () => import('@/views/login/reset'),
       meta: '修改密码'
     },
     {
