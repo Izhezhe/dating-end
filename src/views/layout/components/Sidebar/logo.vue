@@ -34,14 +34,6 @@ export default {
       return this.website.logo.indexOf('static') !== -1
     }
   },
-  mounted() {
-    this.$store.dispatch('GenerateRoutes')
-    // getMenu().then(res => {
-    //   this.$store.commit('SET_ROUTERS', res.datas.childrens)
-    //   // console.log(res.datas.childrens)
-    //   // resolve(data.childrens)
-    // })
-  },
   methods: {}
 }
 </script>

@@ -9,24 +9,29 @@ import { setTitle } from '@/utils/util' // 设置浏览器头部标题
 const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
+  // 设置浏览器头部标题
+  const browserHeaderTitle = to.name
+  store.commit('SET_BROWSERHEADERTITLE', {
+    browserHeaderTitle: browserHeaderTitle
+  })
   if (getToken()) {
-    // 设置浏览器头部标题
-    const browserHeaderTitle = to.name
-    store.commit('SET_BROWSERHEADERTITLE', {
-      browserHeaderTitle: browserHeaderTitle
-    })
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done()
     } else {
-      next()
+      if(store.getters.menu_routers.length === 0) {
+        store.dispatch('GenerateRoutes').then(() => {
+          next({ ...to, replace: true })
+        }).catch((err) => {
+          store.dispatch('FedLogOut').then(() => {
+            next({ path: '/login' })
+          })
+        })
+      } else {
+        next()
+      }
     }
   } else {
-    // 设置浏览器头部标题
-    const browserHeaderTitle = to.name
-    store.commit('SET_BROWSERHEADERTITLE', {
-      browserHeaderTitle: browserHeaderTitle
-    })
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {

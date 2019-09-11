@@ -13,6 +13,9 @@ export default{
 </script>
 
 <style>
-  
+  .app-container {
+    padding: 10px;
+    background-color: #fff;
+  }
 </style>
 

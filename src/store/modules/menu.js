@@ -44,13 +44,15 @@ const menu = {
       commit('TOGGLE_DEVICE', device)
     },
     GenerateRoutes({ commit, rootGetters }) {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         // commit('SET_ROUTERS', rootGetters.website.router.childrens) // 测试数据
         // resolve()
         getMenu().then(response => {
           const data = response.datas
           commit('SET_ROUTERS', data.childrens)
-          resolve(data.childrens)
+          resolve()
+        }).catch((error) => {
+          reject(error)
         })
       })
     }

@@ -9,7 +9,7 @@
       <span slot="title">{{menu.name}}</span>
     </template>
     <template v-for="(child, childIndex) in menu.childrens">
-      <zz-menu-item v-if="child.childrens.length === 0" :menu="child" :key="childIndex"/>
+      <zz-menu-item v-if="child.childrens === null" :menu="child" :key="childIndex"/>
       <zz-menu-sub v-else :menu="child" :key="childIndex"/>
     </template>
   </el-submenu>

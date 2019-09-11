@@ -69,17 +69,22 @@ export default new VueRouter({
           meta: {title: '首页', notCache: true},
         },
         {
-          path: '/account',
-          name: 'account',
-          component: () => import('@/views/account'),
-          meta: {title: '账号管理', notCache: true},
-        },
-        {
           path: '/user',
           name: 'user',
           component: () => import('@/views/user'),
           meta: {title: '账号管理', notCache: true},
         },
+        {
+          path: '/account',
+          name: 'account',
+          component: () => import('@/views/system/account'),
+          meta: {title: '账号管理', notCache: true},
+        },
+        {
+          path: '/menu',
+          name: 'menu',
+          component: () => import('@/views/system/menu')
+        }
       ]
     },
     // 登陆

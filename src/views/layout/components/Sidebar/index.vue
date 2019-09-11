@@ -1,30 +1,18 @@
 <template>
   <el-scrollbar wrapClass="scrollbar-wrapper">
     <logo :isCollapse="isCollapse"></logo>
-    <!-- <el-menu
-      mode="vertical"
-      router
-      :show-timeout="200"
-      :default-active="defaultActive"
-      :collapse="isCollapse"
-      background-color="#294d73"
-      text-color="#fff"
-      active-text-color="#00b4ff"
-    >
-      <sidebar-item :routes="permission_routers"></sidebar-item>
-    </el-menu> -->
     <el-menu
       mode="vertical"
       :collapse="isCollapse"
       :default-active="active"
       ref="menu"
       @select="handleMenuSelect">
-      <template v-for="(menu, menuIndex) in routers">
-        <zz-menu-item v-if="menu.childrens.length === 0" :menu="menu" :key="menuIndex"/>
+      <template v-for="(menu, menuIndex) in menu_routers">
+        <zz-menu-item v-if="menu.childrens === null" :menu="menu" :key="menuIndex"/>
         <zz-menu-sub v-else :menu="menu" :key="menuIndex"/>
       </template>
     </el-menu>
-    <div v-if="routers.length === 0 && !isCollapse" class="sidebar-menu-empty" flex="dir:top main:center cross:center">
+    <div v-if="menu_routers.length === 0 && !isCollapse" class="sidebar-menu-empty">
       <!-- <d2-icon name="inbox"/> -->
       <span>没有侧栏菜单</span>
     </div>
@@ -54,9 +42,6 @@ export default {
     logo,
     zzMenuItem,
     zzMenuSub
-  },
-  mounted() {
-    
   },
   computed: {
     ...mapGetters([
@@ -94,11 +79,6 @@ export default {
       },
       immediate: true
     },
-    menu_routers() {
-      this.$forceUpdate()
-      this.routers = this.menu_routers
-      // console.log(this.menu_routers)
-    }
   }
 }
 </script>
