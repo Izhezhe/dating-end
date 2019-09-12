@@ -65,16 +65,15 @@ body {
 
 .fl{ float: left; }
 .fr{ float: right; }
-.mt{ margin-top: 20px; }
-.mr{ margin-right: 20px; }
-.mb{ margin-bottom: 20px; }
-.ml{ margin-left: 20px; }
-.mb1{ margin-bottom: 10px; }
+.mt{ margin-top: 10px; }
+.mr{ margin-right: 10px; }
+.mb{ margin-bottom: 10px; }
+.ml{ margin-left: 10px; }
 .m0{ margin: 0!important; }
-.pt{ padding-top: 20px; }
-.pr{ padding-right: 20px; }
-.pb{ padding-bottom: 20px; }
-.pl{ padding-left: 20px; }
+.pt{ padding-top: 10px; }
+.pr{ padding-right: 10px; }
+.pb{ padding-bottom: 10px; }
+.pl{ padding-left: 10px; }
 .p0{ padding: 0!important; }
 
 // 引用字体图标样式
@@ -127,8 +126,14 @@ body {
 }
 
 /*BaseTable*/
+.el-table {
+  width: calc(100% - 1px);
+}
 .el-table th, .el-table tr, .el-table td {
   text-align: center;
+}
+.el-table th.gutter{
+  display: table-cell!important;
 }
 .hoveTitle {
   overflow: hidden;
@@ -160,9 +165,6 @@ body {
 }
 .el-time-spinner__wrapper .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
   padding-bottom: 0;
-}
-.el-form-item__label {
-  padding-right: 2px;
 }
 
 /*collapse*/

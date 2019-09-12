@@ -24,8 +24,11 @@ export default {
 
 <style lang="scss" scoped>
 .app-main {
-  padding: 10px;
+  // padding: 10px;
+  width: 100%;
+  height: calc(100% - 71px);
   box-sizing: border-box;
+  position: relative;
 }
 </style>
 

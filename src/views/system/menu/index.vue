@@ -1,44 +1,46 @@
 <template>
   <div class="app-container">
-    <el-row>
+    <el-row class="wrapper">
       <el-col :span="5" class="menu-tree">
-        <el-tree
-          node-key="id"
-          :default-expanded-keys="['4028c6396bff97a2016bff9900000000']" 
-          highlight-current
-          :data="menuTree"
-          :props="defaultProps"
-          :filter-node-method="filterNode"
-          @node-click="handleNodeClick"
-          ref="tree1"></el-tree>
+        <!-- <div class="tree-box"> -->
+          <el-tree
+            node-key="id"
+            :default-expanded-keys="['4028c6396bff97a2016bff9900000000']" 
+            highlight-current
+            :data="menuTree"
+            :props="defaultProps"
+            :filter-node-method="filterNode"
+            @node-click="handleNodeClick"
+            ref="tree1"></el-tree>
+        <!-- </div> -->
       </el-col>
       <el-col :span="18">
-        <el-button @click="handleAdd('operForm')">新增</el-button>
-        <el-table ref="multipleTable" :data="tableData" :loading="loading" border tooltip-effect="dark">
-          <el-table-column
-            type="index">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="菜单名称">
-          </el-table-column>
-          <el-table-column
-            prop="pageUrl"
-            label="页面路径">
-          </el-table-column>
-          <el-table-column
-            prop="icon"
-            label="图标">
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            label="备注">
-          </el-table-column>
-          <el-table-column
-            label="操作">
+        <el-row :gutter="10">
+          <!-- <el-col :span="10">
+            <el-input placeholder="请输入菜单名称" v-model="listQuery.name" size='small' clearable>
+              <template slot="prepend">菜单</template>
+            </el-input>
+          </el-col>
+          <el-col :span="7">
+            <el-button @click="perSearch" type="primary" size="small">查询
+            </el-button>
+          </el-col> -->
+          <el-col :span="7">
+            <div class="">
+              <el-button class="m0" size="small" @click="handleAdd()">添加</el-button>
+            </div>
+          </el-col>
+        </el-row>
+        <el-table ref="multipleTable" size="mini" :data="tableData" border stripe class="mt">
+          <el-table-column label="序号" prop="sort" width="70"></el-table-column>
+          <el-table-column label="菜单名称" prop="name"></el-table-column>
+          <el-table-column label="页面路径" prop="pageUrl"></el-table-column>
+          <el-table-column label="图标" prop="icon"></el-table-column>
+          <el-table-column label="备注" prop="remark"></el-table-column>
+          <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="text" @click="handleDelete(scope.row.id)">删除</el-button>
+              <el-link :underline="false" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-link>
+              <el-link :underline="false" type="primary" size="small" @click="handleDelete(scope.row.id)">删除</el-link>
             </template>
           </el-table-column>
         </el-table>
@@ -46,10 +48,15 @@
     </el-row>
 
     <!-- 新增、编辑 -->
-    <el-dialog :title="operTitle" :visible.sync="operVisible">
-      <el-form ref="operForm" :model="operData" label-width="100px">
+    <el-dialog :title="operTitle[operType]" :visible.sync="operVisible">
+      <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
         <el-form-item label="上级菜单" prop="parentId">
-          <el-input v-model="operData.parentId"></el-input>
+          <treeselect 
+            @select="getPaths"
+            v-model="operData.parentId"
+            :options="menuTree"
+            :normalizer="normalizer"
+            placeholder="请选择上级"/>
         </el-form-item>
         <el-form-item label="菜单名称" prop="name">
           <el-input v-model="operData.name"></el-input>
@@ -69,8 +76,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="operVisible = false">取 消</el-button>
-        <el-button type="primary" v-if="operType == 'add'" @click="operSave()">确 定</el-button>
-        <el-button type="primary" v-if="operType == 'edit'" @click="operUpload()">确 定</el-button>
+        <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -80,9 +86,21 @@
 <script>
 import { getMenu } from '@/api/login'
 import { getMenuList, menuSava, menuUpload, menuDelete } from '@/api/system'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   name: 'menu-manager',
+  components: {
+    Treeselect
+  },
   data() {
+    var validatePass = (rule, value, callback) => {
+      if(this.operData.parentId == '' || this.operData.parentId == null) {
+        callback(new Error('请输入选择上级'));
+      } else {
+        callback();
+      }
+    };
     return {
       // 菜单树
       filterText: '',
@@ -94,21 +112,29 @@ export default {
       },
 
       // 子级菜单
-      loading: false,
       permissionId: '4028c6396bff97a2016bff9900000000',
       tableData: [],
 
       // 新增、编辑
       operVisible: false,
       operType: 'add',
-      operTitle: '新增菜单',
+      operTitle: {
+        add: '添加菜单',
+        edit: '编辑菜单'
+      },
+			pather: '',
       operData: {
-        parentId: '', // 父id
+        parentId: null, // 父id
         name: '', // 菜单名称
+        path: '', // path
         pageUrl: '', // 访问路径
         icon: '', // icon
         sort: '', // 排序
         remark: '', // 备注
+      },
+      operRules: {
+        parentId: [{ required: true, validator: validatePass,trigger: 'change' }],
+        name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }]
       }
 
     }
@@ -125,9 +151,7 @@ export default {
       })
     },
     getList() {
-      this.loading = true
       getMenuList({id: this.permissionId}).then(res => {
-        this.loading = false
         this.tableData = res.datas
       })
     },
@@ -140,45 +164,67 @@ export default {
       this.getList();
     },
 
+    getPaths(nodes, ids) {
+      this.pather = nodes.path
+    },
+    normalizer(node) {
+      if (node.childrens != null) {
+        return {
+          id: node.id,
+          label: node.name,
+          children: node.childrens,
+        }
+      } else {
+        return {
+          id: node.id,
+          label: node.name,
+          children: undefined,
+        }
+      }
+      // console.log(node)
+    },
     // 新增菜单
-    handleAdd(formName) {
+    handleAdd() {
       this.operVisible = true
       this.operType = 'add'
-      this.operTitle = '新增菜单'
-      this.$refs[formName].resetFields();
-    },
-    operSave() {
-      menuSava(this.operData).then(res => {
-        this.$message({
-          message: res.repMsg,
-          type: 'success'
-        })
-        this.operVisible = false
-        this.getMenuTree()
-        this.getList()
-      })
+      this.resetData()
     },
     // 编辑菜单
     handleEdit(row) {
       this.operVisible = true
       this.operType = 'edit'
-      this.operTitle = '编辑菜单'
       this.operData = row
     },
-    operUpload() {
-      menuUpload(this.operData).then(res => {
-        this.$message({
-          message: res.repMsg,
-          type: 'success'
-        })
-        this.operVisible = false
-        this.getMenuTree()
-        this.getList()
+    operSave(formName) {
+      this.$refs[formName].validate((valid) => {
+				if(valid) {
+          if (this.operType == 'add') {
+            menuSava(this.operData).then(res => {
+              this.$message({
+                message: res.repMsg,
+                type: 'success'
+              })
+              this.operVisible = false
+              this.getMenuTree()
+              this.getList()
+            })
+          } else {
+            menuUpload(this.operData).then(res => {
+              this.$message({
+                message: res.repMsg,
+                type: 'success'
+              })
+              this.operVisible = false
+              this.getMenuTree()
+              this.getList()
+            })
+          }
+        }
       })
     },
     // 删除菜单
     handleDelete(id) {
-      this.$confirm('确定删除？').then(() => {
+      this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
         menuDelete({id: id}).then(res => {
           this.$message({
             message: res.repMsg,
@@ -188,6 +234,16 @@ export default {
           this.getList()
         })
       })
+    },
+    resetData() {
+      this.operData = {
+        parentId: null, // 父id
+        name: '', // 菜单名称
+        pageUrl: '', // 访问路径
+        icon: '', // icon
+        sort: '', // 排序
+        remark: '', // 备注
+      }
     },
   },
   watch: {
@@ -201,5 +257,9 @@ export default {
 <style lang="scss" scoped>
   .menu-tree {
     margin-right: 20px;
+    height: 100%;
+    // .tree-box {
+    //   height: 100%;
+    // }
   }
 </style>

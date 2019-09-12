@@ -28,10 +28,10 @@ export function menuUpload(data) {
 }
 
 // 删除菜单
-export function menuDelete(id) {
+export function menuDelete(data) {
   return request({
     url: '/sys/menu/delete',
     method: 'post',
-    id
+    data
   })
 }

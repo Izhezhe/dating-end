@@ -18,3 +18,17 @@ export const setTitle = function(title) {
   window.document.title = title + '-业务管理'
 }
 
+/**
+ * @description 打开新页面
+ * @param {String} url 地址
+ */
+export const openUrl = function (url) { 
+  var a = document.createElement('a')
+  a.setAttribute('href', url)
+  a.setAttribute('target', '_blank')
+  a.setAttribute('id', 'zzadmin-menu-link')
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(document.getElementById('zzadmin-menu-link'))
+}
+

@@ -4,6 +4,7 @@
     <el-menu
       mode="vertical"
       :collapse="isCollapse"
+      :unique-opened="true"
       :default-active="active"
       ref="menu"
       @select="handleMenuSelect">
@@ -20,13 +21,12 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { getMenu } from '@/api/login'
-import SidebarItem from './SidebarItem'
+import { openUrl } from '@/utils/util'
+import logo from './logo'
 import zzMenuItem from './menuItem'
 import zzMenuSub from './menuSub'
-import logo from './logo'
 
 export default {
   name: 'sidebar',
@@ -38,7 +38,6 @@ export default {
     }
   },
   components: { 
-    SidebarItem, 
     logo,
     zzMenuItem,
     zzMenuSub
@@ -55,15 +54,13 @@ export default {
   },
   methods: {
     handleMenuSelect (index, indexPath) {
-      // if (/^d2-menu-empty-\d+$/.test(index)) {
-      //   this.$message.warning('临时菜单')
-      // } else if (/^https:\/\/|http:\/\//.test(index)) {
-      //   util.open(index)
-      // } else {
+      if (/^https:\/\/|http:\/\//.test(index)) {
+        openUrl(index)
+      } else {
         this.$router.push({
           path: index
         })
-      // }
+      }
     }
   },
   watch: {

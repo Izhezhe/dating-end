@@ -1,56 +1,5 @@
 import Layout from '@/views/layout/layout'
 
-// const frameIn = [
-//   {
-//     path: '/',
-//     redirect: {
-//       name: 'login'
-//     },
-//     meta: {
-//       title: '登录'
-//     },
-//     component: Layout,
-//     children: [
-//       {
-//         path: '/index',
-//         name: 'index',
-//         component: () => import('@/views/index'),
-//         meta: {title: '首页', notCache: true},
-//       },
-//       // {
-//       //   path: 'index2',
-//       //   name: 'index2',
-//       //   component: () => import('@/views/index'),
-//       //   meta: {meta, title: '首页', notCache: true},
-//       // },
-//       // {
-//       //   path: 'index3',
-//       //   name: 'index3',
-//       //   component: () => import('@/views/index'),
-//       //   meta: {meta, title: '首页', notCache: true},
-//       // },
-//     ]
-//   },
-//   // 登陆
-// 	{
-// 		path: '/login',
-// 		name: 'login',
-// 		component: () => import('@/views/account/login'),
-// 		meta: '登陆'
-// 	},
-// 	{
-// 		path: '/reset',
-// 		name: 'reset',
-// 		component: () => import('@/views/account/reset'),
-// 		meta: '修改密码'
-//   },
-//   {
-//     path: '*',
-//     redirect: '/404',
-//     component: () => import('@/views/errorPage/404'),
-//   }
-// ]
-
 export default new VueRouter({
   mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
@@ -84,6 +33,11 @@ export default new VueRouter({
           path: '/menu',
           name: 'menu',
           component: () => import('@/views/system/menu')
+        },
+        {
+          path: '/about',
+          name: 'about',
+          component: () => import('@/views/config/about')
         }
       ]
     },

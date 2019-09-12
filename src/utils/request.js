@@ -1,4 +1,4 @@
-import { Message, MessageBox } from 'element-ui'
+import { Loading, Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
 
@@ -8,6 +8,7 @@ const service = axios.create({
   timeout: 300000, // 请求超时时间
 })
 
+let loadinginstace;
 // request拦截器
 service.interceptors.request.use(config => {
   if (store.getters.token) {
@@ -18,11 +19,17 @@ service.interceptors.request.use(config => {
     config.method === 'post' ? config.data = Qs.stringify({...config.data}) : config.params = {...config.params}
   }
 
+  loadinginstace = Loading.service({fullscreen: true})
   return config
 }, error => {
   // Do something with request error
-  console.log(error) // for debug
-  Promise.reject(error)
+  loadinginstace.close();
+  Message({
+    message: '请求超时',
+    type: 'error',
+    duration: 10 * 1000
+  })
+  return Promise.reject(error)
 })
 
 // respone拦截器
@@ -31,6 +38,7 @@ service.interceptors.response.use(
     /**
       * code为非200是抛错 可结合自己业务进行修改
       */
+     loadinginstace.close();
      const res = response.data
      if( res.repCode == 200 ) {
        return res
@@ -44,6 +52,7 @@ service.interceptors.response.use(
      } 
   },
   error => {
+    loadinginstace.close();
     Message({
       message: error.repMsg,
       type: 'error',
