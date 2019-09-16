@@ -19,7 +19,7 @@ export function menuSava(data) {
 }
 
 // 编辑更新菜单
-export function menuUpload(data) {
+export function menuUpdate(data) {
   return request({
     url: '/sys/menu/update',
     method: 'post',

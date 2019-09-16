@@ -57,6 +57,7 @@ export default {
       if (/^https:\/\/|http:\/\//.test(index)) {
         openUrl(index)
       } else {
+        console.log(index)
         this.$router.push({
           path: index
         })

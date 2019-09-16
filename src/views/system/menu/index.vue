@@ -85,7 +85,7 @@
 
 <script>
 import { getMenu } from '@/api/login'
-import { getMenuList, menuSava, menuUpload, menuDelete } from '@/api/system'
+import { getMenuList, menuSava, menuUpdate, menuDelete } from '@/api/system'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
@@ -209,7 +209,7 @@ export default {
               this.getList()
             })
           } else {
-            menuUpload(this.operData).then(res => {
+            menuUpdate(this.operData).then(res => {
               this.$message({
                 message: res.repMsg,
                 type: 'success'

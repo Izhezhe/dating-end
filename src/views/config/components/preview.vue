@@ -1,6 +1,8 @@
 <template>
-  <el-dialog :title="data.title" :visible.sync="viewVisible" @close="close()">
-    {{data.content}}
+  <el-dialog :title="title" :visible.sync="viewVisible" width="1000px" @close="close()">
+    <div v-html="data">
+      {{data}}
+    </div>
   </el-dialog>
 </template>
 
@@ -12,13 +14,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    title: {
+      type: String,
+      default: ''
+    },
     data: {
-      type: Object,
-      default: {}
+      type: String,
+      default: ''
     }
-  },
-  created() {
-    
   },
   methods: {
     close() {
@@ -27,3 +30,7 @@ export default {
   }
 }
 </script>
+
+<style lang="">
+  
+</style>

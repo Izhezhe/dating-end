@@ -21,24 +21,33 @@ export default new VueRouter({
           path: '/user',
           name: 'user',
           component: () => import('@/views/user'),
-          meta: {title: '账号管理', notCache: true},
+          meta: {title: '用户管理', notCache: true},
         },
+        // 配置管理
         {
-          path: '/account',
+          path: '/config',
+          name: 'config',
+          component: () => import('@/views/config'),
+          meta: {title: '配置管理', notCache: true},
+        }
+      ]
+    },
+    {
+      path: '/system',
+      component: Layout,
+      children: [
+        {
+          path: 'account',
           name: 'account',
           component: () => import('@/views/system/account'),
           meta: {title: '账号管理', notCache: true},
         },
         {
-          path: '/menu',
+          path: 'menu',
           name: 'menu',
-          component: () => import('@/views/system/menu')
+          component: () => import('@/views/system/menu'),
+          meta: {title: '菜单管理', notCache: true},
         },
-        {
-          path: '/about',
-          name: 'about',
-          component: () => import('@/views/config/about')
-        }
       ]
     },
     // 登陆

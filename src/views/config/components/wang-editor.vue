@@ -7,8 +7,19 @@
 
 <script>
 import E from 'wangeditor'
+import { tempGet } from '@/api/config'
 export default {
   name: 'editor-bar',
+  data() {
+    return {
+      editor: null,
+      info_: null
+    }
+  },
+  model:{
+    prop: 'value',
+    event: 'change'
+  },
   props: {
     value: {
       type: String,
@@ -19,16 +30,6 @@ export default {
       default: false
     }
   },
-  model:{
-    prop: 'value',
-    event: 'change'
-  },
-  data() {
-    return {
-      editor: null,
-      info_: null
-    }
-  },
   mounted() {
     this.setEditor()
   },
@@ -36,6 +37,7 @@ export default {
     setEditor() {
       this.editor = new E(this.$refs.toolbar, this.$refs.editor)
 
+      this.editor.customConfig.showLinkImg = false // 隐藏“网络图片”tab
       this.editor.customConfig.uploadImgShowBase64 = true // baes64存储图片
       this.editor.customConfig.uploadFileName = '' // 后端接收上传文件的参数名
       this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为2M
@@ -55,15 +57,15 @@ export default {
         'list',  // 列表
         'justify',  // 对齐方式
         'quote',  // 引用
-        'emoticon',  // 表情
+        // 'emoticon',  // 表情
         'image',  // 插入图片
         'table',  // 表格
-        'video',  // 插入视频
+        // 'video',  // 插入视频
         'code',  // 插入代码
         'undo',  // 撤销
         'redo'  // 重复
       ]
-
+      
       this.editor.customConfig.onchange = (html) => {
         this.info_ = html // 绑定当前逐渐的值
         this.$emit('change', this.info_)
@@ -71,19 +73,23 @@ export default {
 
       this.editor.create()
     },
-    watch: {
-      isClear(val) {
-        if (val) {
-          this.editor.txt.clear()
-          this.info_ = null
-        }
-      },
-      value(val) {
-        // 使用 v-model 时，设置初始值
-        this.editor.txt.html(val)
+  },
+  watch: {
+    isClear(val) {
+      if (val) {
+        this.editor.txt.clear()
+        this.info_ = null
       }
     },
-  }
+    value(val) {
+      // 使用 v-model 时，设置初始值
+      this.editor.txt.html(val)
+    },
+    // curConfig(val) {
+    //   console.log(val)
+    //   console.log(this.curConfig)
+    // },
+  },
 }
 </script>
 
@@ -94,9 +100,13 @@ export default {
   }
   .toolbar {
     border: 1px solid #ccc;
+    >div {
+      z-index: 1005!important;
+    }
   }
   .text {
     border: 1px solid #ccc;
-    height: 500px;
+    height: 450px;
+    z-index: 1000!important;
   }
 </style>
