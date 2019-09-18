@@ -1,9 +1,11 @@
-import { login, resetPass, logout, register } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, resetPass, logout } from '@/api/login'
+import { getImageToken, imageUpload } from '@/api/img'
+import { getToken, setToken, removeToken, getImgToken, setImgToken, removeImgToken } from '@/utils/auth'
 import { setStore, getStore, removeStore } from '@/utils/store'
 const user = {
   state: {
     token: getToken(),
+    imgToken: getImgToken(),
     id: getStore({ name: 'id' }) || '',
     name: getStore({ name: 'name' }) || '',
     avatar: getStore({ name: 'avatar' }) || '',
@@ -14,6 +16,9 @@ const user = {
   mutations: {
     SET_TOKEN: (state, val) => {
       state.token = val
+    },
+    SET_IMG_TOKEN: (state, val) => {
+      state.imgToken = val
     },
     SET_ID: (state, val) => {
       state.id = val
@@ -83,7 +88,9 @@ const user = {
       return new Promise((resolve, reject) => {
         logout().then(() => {
           commit('SET_TOKEN', '')
+          commit('SET_IMG_TOKEN', '')
           removeToken()
+          removeImgToken()
           resolve()
         }).catch(error => {
           reject(error)
@@ -95,16 +102,37 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_IMG_TOKEN', '')
         removeToken()
+        removeImgToken()
         resolve()
       })
     },
 
-    // 注册
-    Register({ commit }, datas) {
-      return new Promise(resolve => {
-        register(datas).then(res => {
-          console.log(res)
+    // 获取img上传token
+    GetImgToken({ commit }) {
+      return new Promise((resolve, reject) => {
+        getImageToken().then(response => {
+          const data = response
+          console.log(data)
+          setImgToken(data.uptoken)
+          commit('SET_IMG_TOKEN', data.uptoken)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 上传图片
+    ImgUpload({ commit }, file) {
+      return new Promise((resolve, reject) => {
+        var formData = new FormData();
+        formData.append('img', file);
+        console.log(formData.get('img'))
+        // return
+        imageUpload(formData).then(res => {
+          resolve(res.datas.imgUrl)
         }).catch(error => {
           reject(error)
         })

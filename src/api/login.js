@@ -37,7 +37,7 @@ export function resetPass(newpassword, newpassword1) {
  */
 export function logout() {
   return request({
-    url: '/api/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }

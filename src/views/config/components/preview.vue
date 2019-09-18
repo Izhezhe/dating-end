@@ -31,6 +31,12 @@ export default {
 }
 </script>
 
-<style lang="">
-  
+<style scoped>
+  .el-dialog {
+    max-width: 890px;
+    width: auto;
+    min-width: 280px;
+    padding: 50px 75px;
+    background: #b8dbf0;
+  }
 </style>

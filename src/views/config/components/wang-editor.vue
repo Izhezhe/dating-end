@@ -35,12 +35,46 @@ export default {
   },
   methods: {
     setEditor() {
+      const _this = this
       this.editor = new E(this.$refs.toolbar, this.$refs.editor)
 
+      this.editor.customConfig.pasteFilterStyle = false // 关闭粘贴样式的过滤
+      this.editor.customConfig.pasteIgnoreImg = true // 忽略粘贴内容中的图片
       this.editor.customConfig.showLinkImg = false // 隐藏“网络图片”tab
       this.editor.customConfig.uploadImgShowBase64 = true // baes64存储图片
       this.editor.customConfig.uploadFileName = '' // 后端接收上传文件的参数名
       this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为2M
+      this.editor.customConfig.customUploadImg = function (files, insert) {
+        // var imgUrl = _this.$store.dispatch('ImgUpload', files[0])
+        // axios.post('http://image.zhzhao.top/', { bucket: 'dating-hb' }).then((res) => {
+          const uploadToken = this.$store.getters.imgToken;
+          var data = new FormData();
+          data.append('token', uploadToken);
+          data.append('file', files[0]);
+          axios({
+            method: 'POST',
+            url: 'http://image.zhzhao.top/',
+            data: data,
+            onUploadProgress: function (progressEvent) {
+              var percentCompleted = Math.round(progressEvent.loaded * 100 / progressEvent.total);
+            },
+          }).then((res) => {
+            //  `http://publicimage.xq5.com/${response.data.key}`; （若bucket 参数为public-image则不需要下一步的图片地址获取可直接使用http://publicimage.xq5.com/ + ‘res.data.key’，拼接图片地址）
+            console.log(res.data.key)
+          })
+        // 上传代码返回结果之后，将图片插入到编辑器中
+        // insert(imgUrl)
+      }
+
+      // module.exports = {
+      //   AccessKey: "8Kxy8jJP3LSW_olkF9_a5Hpt7qu9Jqu3zUeVz0U3",
+      //   SecretKey: "WjbEVLtcLMQZbI3x_Lvx7l9QqSB3nBbefhFtoxCt",
+      //   Bucket: "dating-hb",
+      //   Port: 19110,
+      //   UptokenUrl: "http://sys.zhzhao.top/image/uptoken",//直接填接口地址即可
+      //   //uptoken: "接口获取到的token值", //和上面二选一即可，填接口获取到的值
+      //   Domain: "http://image.zhzhao.top/"
+      // }
 
       // 配置菜单
       this.editor.customConfig.menus = [
@@ -85,10 +119,6 @@ export default {
       // 使用 v-model 时，设置初始值
       this.editor.txt.html(val)
     },
-    // curConfig(val) {
-    //   console.log(val)
-    //   console.log(this.curConfig)
-    // },
   },
 }
 </script>

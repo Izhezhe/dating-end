@@ -4,7 +4,7 @@ import { getToken } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
+  baseURL: process.env.BASE_API + '/api', // api的base_url
   timeout: 300000, // 请求超时时间
 })
 
@@ -13,11 +13,8 @@ let loadinginstace;
 service.interceptors.request.use(config => {
   if (store.getters.token) {
     config.headers['datingAuth'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-  }else {}
-
-  if (config.headers['Content-Type'] != 'multipart/form-data') {
-    config.method === 'post' ? config.data = Qs.stringify({...config.data}) : config.params = {...config.params}
   }
+  config.method === 'post' ? config.data = Qs.stringify({...config.data}) : config.params = {...config.params}
 
   loadinginstace = Loading.service({fullscreen: true})
   return config

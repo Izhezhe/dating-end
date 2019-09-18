@@ -1,6 +1,7 @@
 const getters = {
   // language: state => state.app.language,
   token: state => state.user.token,
+  imgToken: state => state.user.imgToken,
   userId: state => state.user.id,
   avatar: state => state.user.avatar,
   name: state => state.user.name,

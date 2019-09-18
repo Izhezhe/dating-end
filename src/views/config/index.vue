@@ -2,7 +2,9 @@
   <div class="app-container">
     <!-- <div class="page-title">{{previewData.title}}</div> -->
     <el-tabs v-model="curConfig" @tab-click="handleClick">
-      <el-tab-pane v-for="(item, index) in configType" :key="index" :label="item" :name="item"></el-tab-pane>
+      <el-tab-pane v-for="(item, index) in configType" :key="index" :label="item" :name="item">
+        <div class="remark"><label>备注：</label><el-input v-model="remark" placeholder="请输入备注"></el-input></div>
+      </el-tab-pane>
     </el-tabs>
     <editor-bar v-model="editor.info" :isClear="isClear"></editor-bar>
     <div class="page-footer">
@@ -14,15 +16,16 @@
 </template>
 
 <script>
-import { tempGet, tempUpdate } from '@/api/config'
+import { tempGet, tempSave } from '@/api/config'
 import EditorBar from './components/wang-editor'
 import Preview from './components/preview'
 export default {
   name: 'about',
   data() {
     return {
-      curConfig: 'about',
-      configType: ['about', 'Terms & Conditions', 'Privacy Policy', 'Dating Securely', 'Help Center', 'Become A Partner'],
+      curConfig: 'About',
+      configType: ['About', 'Terms & Conditions', 'Privacy Policy', 'Dating Securely', 'Help Center', 'Become A Partner'],
+      remark: '',
 
       editor: {
         info: ''
@@ -41,7 +44,8 @@ export default {
     getList() {
       tempGet({code: this.curConfig}).then(res => {
         this.editor.info = res.datas.content
-        console.log(this.editor.info)
+        this.remark = res.datas.remark
+        // console.log(this.editor.info)
       })
     },
 
@@ -50,9 +54,9 @@ export default {
       const data = {
         code: this.curConfig,
         content: this.editor.info,
-        remark: ''
+        remark: this.remark
       }
-      tempUpdate(data).then(res => {
+      tempSave(data).then(res => {
         this.$message({
           message: res.repMsg,
           type: 'success'
@@ -66,3 +70,17 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  .remark {
+    width: 80%;
+    margin: 0 auto 10px;
+    label {
+      display: inline-block;
+      width: 50px;
+    }
+    .el-input {
+      width: calc(100% - 50px);
+    }
+  }
+</style>

@@ -14,9 +14,9 @@ export function tempGet(data) {
 /**
  * 添加配置
  */
-export function tempAdd(data) {
+export function tempSave(data) {
   return request({
-    url: '/html/template/create',
+    url: '/html/template/save',
     method: 'post',
     data
   })
