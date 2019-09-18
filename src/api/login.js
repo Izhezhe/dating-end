@@ -65,3 +65,11 @@ export function getMenu() {
     method: 'get',
   })
 }
+
+// 获取img上传token
+export function getImageToken() {
+  return request({
+    url: '/image/token',
+    method: 'get',
+  })
+}
