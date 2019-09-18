@@ -31,9 +31,9 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
-    if(!getImgToken()) {
-      store.dispatch('GetImgToken')
-    }
+    // if(!getImgToken()) {
+    //   store.dispatch('GetImgToken')
+    // }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
