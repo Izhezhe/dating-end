@@ -183,18 +183,19 @@ export default {
       }
       // console.log(node)
     },
-    // 新增菜单
+    // 新增
     handleAdd() {
       this.operVisible = true
       this.operType = 'add'
       this.resetData()
     },
-    // 编辑菜单
+    // 编辑
     handleEdit(row) {
       this.operVisible = true
       this.operType = 'edit'
       this.operData = row
     },
+    // 保存
     operSave(formName) {
       this.$refs[formName].validate((valid) => {
 				if(valid) {
@@ -222,7 +223,7 @@ export default {
         }
       })
     },
-    // 删除菜单
+    // 删除
     handleDelete(id) {
       this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
         menuDelete({id: id}).then(res => {

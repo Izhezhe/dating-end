@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { accountGet, accountAdd, accountUpdate, accountPassReset } from '@/api/system'
 export default {
   name: 'account',
   data() {
@@ -70,22 +71,19 @@ export default {
       operVisible: false,
       operType: 'add',
       operTitle: {
-        add: '添加账号',
-        edit: '编辑账号'
+        add: '添加系统账号',
+        edit: '编辑系统账号'
       },
-			pather: '',
       operData: {
-        parentId: null, // 父id
-        name: '', // 菜单名称
-        path: '', // path
-        pageUrl: '', // 访问路径
-        icon: '', // icon
-        sort: '', // 排序
-        remark: '', // 备注
+        id: '', // id
+        username: '', // 用户名
+        password: '', // 密码
+        phone: '', // 手机号
+        email: '', // 邮箱
       },
       operRules: {
-        parentId: [{ required: true, validator: validatePass,trigger: 'change' }],
-        name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }]
+        // parentId: [{ required: true, validator: validatePass,trigger: 'change' }],
+        // name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -94,8 +92,73 @@ export default {
   },
   methods: {
     getList() {
+      accountGet().then(res => {
+        this.tableData = res.datas
+      })
+    },
 
-    }
+    // 新增
+    handleAdd() {
+      this.operVisible = true
+      this.operType = 'add'
+      this.resetData()
+    },
+    // 编辑
+    handleEdit(row) {
+      this.operVisible = true
+      this.operType = 'edit'
+      this.operData = row
+    },
+    // 保存
+    operSave(formName) {
+      this.$refs[formName].validate((valid) => {
+				if(valid) {
+          if (this.operType == 'add') {
+            accountAdd(this.operData).then(res => {
+              this.$message({
+                message: res.repMsg,
+                type: 'success'
+              })
+              this.operVisible = false
+              this.getMenuTree()
+              this.getList()
+            })
+          } else {
+            accountUpdate(this.operData).then(res => {
+              this.$message({
+                message: res.repMsg,
+                type: 'success'
+              })
+              this.operVisible = false
+              this.getMenuTree()
+              this.getList()
+            })
+          }
+        }
+      })
+    },
+    // 删除
+    handleDelete(id) {
+      // this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
+      //   menuDelete({id: id}).then(res => {
+      //     this.$message({
+      //       message: res.repMsg,
+      //       type: 'success'
+      //     })
+      //     this.getMenuTree()
+      //     this.getList()
+      //   })
+      // })
+    },
+    resetData() {
+      this.operData = {
+        id: '', // id
+        username: '', // 用户名
+        password: '', // 密码
+        phone: '', // 手机号
+        email: '', // 邮箱
+      }
+    },
   }
 }
 </script>
