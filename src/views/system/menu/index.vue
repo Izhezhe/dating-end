@@ -15,23 +15,14 @@
         <!-- </div> -->
       </el-col>
       <el-col :span="18">
-        <el-row :gutter="10">
-          <!-- <el-col :span="10">
-            <el-input placeholder="请输入菜单名称" v-model="listQuery.name" size='small' clearable>
-              <template slot="prepend">菜单</template>
-            </el-input>
-          </el-col>
-          <el-col :span="7">
-            <el-button @click="perSearch" type="primary" size="small">查询
-            </el-button>
-          </el-col> -->
-          <el-col :span="7">
-            <div class="">
-              <el-button class="m0" size="small" @click="handleAdd()">添加</el-button>
+        <el-row class="mb">
+          <el-col>
+            <div class="fr">
+              <el-button size="small" type="primary" @click="handleAdd()">添加</el-button>
             </div>
           </el-col>
         </el-row>
-        <el-table ref="multipleTable" size="mini" :data="tableData" border stripe class="mt">
+        <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
           <el-table-column label="序号" prop="sort" width="70"></el-table-column>
           <el-table-column label="菜单名称" prop="name"></el-table-column>
           <el-table-column label="页面路径" prop="pageUrl"></el-table-column>

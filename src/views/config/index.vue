@@ -9,7 +9,7 @@
     <editor-bar v-model="editor.info" :isClear="isClear"></editor-bar>
     <div class="page-footer">
       <el-button size="small" @click="isViewShow = true">预览</el-button>
-      <el-button size="small" @click="save()">保存</el-button>
+      <el-button size="small" type="primary" @click="save()">保存</el-button>
     </div>
     <preview @viewHide="isViewShow = false" :viewVisible="isViewShow" :title="curConfig" :data="editor.info"></preview>
   </div>
