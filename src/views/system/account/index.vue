@@ -21,11 +21,10 @@
       </el-row>
       <el-table ref="multipleTable" size="mini" :data="tableData" @selection-change="selsChange" border stripe>
         <el-table-column type="selection" width="70"></el-table-column>
-        <el-table-column label="序号" prop="sort" width="70"></el-table-column>
-        <el-table-column label="菜单名称" prop="name"></el-table-column>
-        <el-table-column label="页面路径" prop="pageUrl"></el-table-column>
-        <el-table-column label="图标" prop="icon"></el-table-column>
-        <el-table-column label="备注" prop="remark"></el-table-column>
+        <el-table-column label="序号" type="index" width="70"></el-table-column>
+        <el-table-column label="用户名" prop="username"></el-table-column>
+        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column label="手机号" prop="phone"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
@@ -35,7 +34,7 @@
       </el-table>
       <!--工具条-->
       <el-row class="toolbar toolbar-bottom" v-if="total!=0">
-        <el-pagination layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="filters.perpage" :total="total" style="float:right;">
+        <el-pagination layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="filters.pageSize" :total="total" style="float:right;">
         </el-pagination>
       </el-row>
     </div>
@@ -43,14 +42,14 @@
     <!-- 新增、编辑 -->
     <el-dialog :title="operTitle[operType]" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="operData.email"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="operData.password"></el-input>
-        </el-form-item>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="operData.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password" v-if="operType == 'add'">
+          <el-input v-model="operData.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="operData.email"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="operData.phone"></el-input>
@@ -73,8 +72,8 @@ export default {
     return {
       // 查询条件
       filters: {
-        page: 1,
-        perpage: 10,
+        pageNumber: 1,
+        pageSize: 10,
         username: '',
         phone: '',
       },
@@ -91,16 +90,16 @@ export default {
       },
       operData: {
         id: '', // id
-        email: '', // 邮箱
-        password: '', // 密码
         username: '', // 用户名
+        password: '', // 密码
+        email: '', // 邮箱
         phone: '', // 手机号
       },
       operRules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }, { max: 16, message: '用户名最长为16位', trigger: 'blur' }],
-        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }, { max: 6, message: '密码最少为6位', trigger: 'blur' }],
+        email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }, { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
         phone: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
-        email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
       }
     }
   },
@@ -110,7 +109,8 @@ export default {
   methods: {
     getList() {
       accountGet(this.filters).then(res => {
-        this.tableData = res.datas
+        this.tableData = res.datas.pageData
+        this.total = res.datas.totalElements
       })
     },
 
@@ -119,7 +119,7 @@ export default {
       this.sels = sels
     },
     handleCurrentChange(val) {
-      this.filters.page = val
+      this.filters.pageNumber = val
       this.getList()
     },
     // 重置密码
@@ -182,8 +182,8 @@ export default {
     },
     resetFilters() {
       this.filters = {
-        page: 1,
-        perpage: 10,
+        pageNumber: 1,
+        pageSize: 10,
         username: '',
         phone: '',
       }
@@ -192,9 +192,9 @@ export default {
     resetData() {
       this.operData = {
         id: '', // id
-        email: '', // 邮箱
-        password: '', // 密码
         username: '', // 用户名
+        password: '', // 密码
+        email: '', // 邮箱
         phone: '', // 手机号
       }
     },
