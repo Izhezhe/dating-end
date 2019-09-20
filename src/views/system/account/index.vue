@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="6">
           <el-button size="small" type="primary" @click="getList()">查询</el-button>
-          <el-button size="small" @click="resetFilters()">重置</el-button>
+          <el-button size="small" @click="filtersReset()">重置</el-button>
         </el-col>
         <el-col :span="6">
           <div class="fr">
@@ -180,7 +180,7 @@ export default {
       //   })
       // })
     },
-    resetFilters() {
+    filtersReset() {
       this.filters = {
         pageNumber: 1,
         pageSize: 10,
