@@ -52,7 +52,7 @@ export function accountAdd(data) {
 // 编辑系统账号
 export function accountUpdate(data) {
   return request({
-    url: '/user/common/update',
+    url: '/user/common/update/base',
     method: 'post',
     data
   })
@@ -61,6 +61,15 @@ export function accountUpdate(data) {
 export function accountPassReset(data) { 
   return request({
     url: '/user/common/password/reset',
+    method: 'post',
+    data
+  })
+}
+
+// 删除账号
+export function accountDelete(data) { 
+  return request({
+    url: '',
     method: 'post',
     data
   })

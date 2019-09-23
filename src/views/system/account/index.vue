@@ -9,18 +9,16 @@
           <el-input size="small" v-model="filters.phone" placeholder="请输入手机号"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-button size="small" type="primary" @click="getList()">查询</el-button>
+          <el-button size="small" type="primary" @click="getList(true)">查询</el-button>
           <el-button size="small" @click="filtersReset()">重置</el-button>
         </el-col>
         <el-col :span="6">
           <div class="fr">
             <el-button size="small" type="primary" @click="handleAdd()">添加</el-button>
-            <el-button size="small" type="danger" :disabled="!sels.length" @click="handleResetPass()">重置密码</el-button>
           </div>
         </el-col>
       </el-row>
-      <el-table ref="multipleTable" size="mini" :data="tableData" @selection-change="selsChange" border stripe>
-        <el-table-column type="selection" width="70"></el-table-column>
+      <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
         <el-table-column label="序号" type="index" width="70"></el-table-column>
         <el-table-column label="用户名" prop="username"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
@@ -28,13 +26,14 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
+            <el-link :underline="false" size="small" type="primary" @click="handleResetPass(scope.row.id)">重置密码</el-link>
             <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link>
           </template>
         </el-table-column>
       </el-table>
       <!--工具条-->
       <el-row class="toolbar toolbar-bottom" v-if="total!=0">
-        <el-pagination layout="total, prev, pager, next" @current-change="handleCurrentChange" :page-size="filters.pageSize" :total="total" style="float:right;">
+        <el-pagination layout="total, prev, pager, next" @current-change="handleCurrentChange" :current-page.sync="filters.pageNumber" :page-size="filters.pageSize" :total="total" style="float:right;">
         </el-pagination>
       </el-row>
     </div>
@@ -65,10 +64,18 @@
 </template>
 
 <script>
-import { accountGet, accountAdd, accountUpdate, accountPassReset } from '@/api/system'
+import { isValidateMobile } from '@/utils/validate'
+import { accountGet, accountAdd, accountUpdate, accountPassReset, accountDelete } from '@/api/system'
 export default {
   name: 'account',
   data() {
+    const validatePhone = (rule, value, callback) => {
+      if (isValidateMobile(value)[0]) {
+        callback(new Error(isValidateMobile(value)[1]))
+      } else {
+        callback()
+      }
+    }
     return {
       // 查询条件
       filters: {
@@ -78,7 +85,6 @@ export default {
         phone: '',
       },
       total: 0,
-      sels: [],
       tableData: [],
 
       // 新增、编辑
@@ -97,9 +103,9 @@ export default {
       },
       operRules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }, { max: 16, message: '用户名最长为16位', trigger: 'blur' }],
-        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }, { max: 6, message: '密码最少为6位', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }, { min: 6, message: '密码最少为6位', trigger: 'blur' }],
         email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }, { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
-        phone: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
+        phone: [{ required: true, trigger: 'change', validator: validatePhone }],
       }
     }
   },
@@ -107,24 +113,18 @@ export default {
     this.getList()
   },
   methods: {
-    getList() {
+    getList(b=false) {
+      if(b) {
+        this.filters.pageNumber = 1
+      }
       accountGet(this.filters).then(res => {
         this.tableData = res.datas.pageData
         this.total = res.datas.totalElements
       })
     },
-
-    // 全选单选多选
-    selsChange(sels) {
-      this.sels = sels
-    },
     handleCurrentChange(val) {
       this.filters.pageNumber = val
       this.getList()
-    },
-    // 重置密码
-    handleResetPass() {
-
     },
 
     // 新增
@@ -150,8 +150,7 @@ export default {
                 type: 'success'
               })
               this.operVisible = false
-              this.getMenuTree()
-              this.getList()
+              this.getList(true)
             })
           } else {
             accountUpdate(this.operData).then(res => {
@@ -160,25 +159,34 @@ export default {
                 type: 'success'
               })
               this.operVisible = false
-              this.getMenuTree()
               this.getList()
             })
           }
         }
       })
     },
+    // 重置密码
+    handleResetPass(id) {
+      this.$confirm('确定重置密码？', '提示', {type: 'warning'}).then(() => {
+        accountPassReset({id: id}).then(res => {
+          this.$message({
+            message: res.repMsg,
+            type: 'success'
+          })
+        })
+      })
+    },
     // 删除
     handleDelete(id) {
-      // this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
-      //   menuDelete({id: id}).then(res => {
-      //     this.$message({
-      //       message: res.repMsg,
-      //       type: 'success'
-      //     })
-      //     this.getMenuTree()
-      //     this.getList()
-      //   })
-      // })
+      this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
+        accountDelete({id: id}).then(res => {
+          this.$message({
+            message: res.repMsg,
+            type: 'success'
+          })
+          this.getList(true)
+        })
+      })
     },
     filtersReset() {
       this.filters = {
