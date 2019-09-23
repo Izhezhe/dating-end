@@ -144,6 +144,7 @@ export default {
     getList() {
       getMenuList({id: this.permissionId}).then(res => {
         this.tableData = res.datas
+        console.log(res.datas)
       })
     },
     filterNode(value, data) {

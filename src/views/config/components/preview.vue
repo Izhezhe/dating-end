@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="viewVisible" width="1000px" @close="close()">
+  <el-dialog :title="title" :visible.sync="viewVisible" width="890px" @close="close()">
     <div v-html="data">
       {{data}}
     </div>
@@ -32,11 +32,12 @@ export default {
 </script>
 
 <style scoped>
-  .el-dialog {
+  el-dialog {
     max-width: 890px;
     width: auto;
     min-width: 280px;
     padding: 50px 75px;
     background: #b8dbf0;
   }
+
 </style>
