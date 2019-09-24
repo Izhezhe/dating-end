@@ -195,7 +195,7 @@ export default {
         username: '',
         phone: '',
       }
-      this.getList()
+      this.getList(true)
     },
     resetData() {
       this.operData = {

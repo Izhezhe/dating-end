@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function login(username, password) {
   return request({
-    url: '/user/login',
+    url: '/account/login',
     method: 'post',
     data: {
       username,
@@ -23,7 +23,7 @@ export function login(username, password) {
  */
 export function resetPass(newpassword, newpassword1) {
   return request({
-    url: '/api/password/change',
+    url: '/account/update/password',
     method: 'post',
     data: {
       newpassword,
@@ -37,7 +37,7 @@ export function resetPass(newpassword, newpassword1) {
  */
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/account/logout',
     method: 'post'
   })
 }

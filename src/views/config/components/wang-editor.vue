@@ -38,7 +38,7 @@ export default {
       const _this = this
       this.editor = new E(this.$refs.toolbar, this.$refs.editor)
 
-      this.editor.customConfig.pasteFilterStyle = false // 关闭粘贴样式的过滤
+      this.editor.customConfig.pasteFilterStyle = true // 关闭粘贴样式的过滤
       this.editor.customConfig.pasteIgnoreImg = true // 忽略粘贴内容中的图片
       this.editor.customConfig.showLinkImg = false // 隐藏“网络图片”tab
       this.editor.customConfig.uploadImgShowBase64 = true // baes64存储图片
@@ -55,8 +55,8 @@ export default {
       this.editor.customConfig.menus = [
         'head',  // 标题
         'bold',  // 粗体
-        'fontSize',  // 字号
         'fontName',  // 字体
+        'fontSize', // 大小
         'italic',  // 斜体
         'underline',  // 下划线
         'strikeThrough',  // 删除线
@@ -65,7 +65,7 @@ export default {
         'link',  // 插入链接
         'list',  // 列表
         'justify',  // 对齐方式
-        'quote',  // 引用
+        // 'quote',  // 引用
         // 'emoticon',  // 表情
         // 'image',  // 插入图片
         'table',  // 表格
@@ -74,6 +74,15 @@ export default {
         'undo',  // 撤销
         'redo'  // 重复
       ]
+      this.editor.customConfig.fontsizes = { 
+        1: '12px',
+        2: '14px',
+        3: '18px',
+        4: '20px',
+        5: '22px',
+        6: '26px',
+        7: '30px'
+       }
       
       this.editor.customConfig.onchange = (html) => {
         this.info_ = html // 绑定当前逐渐的值

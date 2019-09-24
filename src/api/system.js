@@ -36,7 +36,7 @@ export function menuDelete(data) {
 // 获取系统账号
 export function accountGet(data) {
   return request({
-    url: '/user/all',
+    url: '/account/all',
     method: 'get',
     params: data
   })
@@ -44,7 +44,7 @@ export function accountGet(data) {
 // 新建系统账号
 export function accountAdd(data) {
   return request({
-    url: '/user/common/add',
+    url: '/account/common/add',
     method: 'post',
     data
   })
@@ -52,7 +52,7 @@ export function accountAdd(data) {
 // 编辑系统账号
 export function accountUpdate(data) {
   return request({
-    url: '/user/common/update/base',
+    url: '/account/common/update/base',
     method: 'post',
     data
   })
@@ -60,7 +60,7 @@ export function accountUpdate(data) {
 // 重置系统账号密码
 export function accountPassReset(data) { 
   return request({
-    url: '/user/common/password/reset',
+    url: '/account/common/password/reset',
     method: 'post',
     data
   })
