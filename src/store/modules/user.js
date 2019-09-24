@@ -1,4 +1,5 @@
 import { login, resetPass, logout, getImageToken } from '@/api/login'
+import { paramGetOne } from '@/api/system'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { setStore, getStore, removeStore } from '@/utils/store'
 const user = {
@@ -110,6 +111,17 @@ const user = {
         })
       })
     },
+
+    // 获取配置
+    GetParam({ commit }, code) {
+      return new Promise((resolve, reject) => {
+        paramGetOne({code: code}).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    }
 
   }
 }

@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       curConfig: 'About',
-      configType: ['About', 'Terms & Conditions', 'Privacy Policy', 'Dating Securely', 'Help Center', 'Become A Partner'],
+      configType: '',
       remark: '',
 
       editor: {
@@ -34,6 +34,7 @@ export default {
     }
   },
   mounted() {
+    this.getType()
     this.getList()
   },
   methods: {
@@ -44,7 +45,11 @@ export default {
       tempGet({code: this.curConfig}).then(res => {
         this.editor.info = res.datas.content
         this.remark = res.datas.remark
-        // console.log(this.editor.info)
+      })
+    },
+    getType() {
+      this.$store.dispatch('GetParam', 'SYS_INTRO_HTML').then(res => {
+        this.configType = res.datas.value.split(',')
       })
     },
 

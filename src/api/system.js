@@ -78,6 +78,21 @@ export function accountDelete(data) {
 export function paramGet(data) {
   return request({
     url: '/sys/param/all',
+    method: 'get'
+  })
+}
+// 修改系统配置
+export function paramUpdate(data) {
+  return request({
+    url: '/sys/param/update',
+    method: 'post',
+    data
+  })
+}
+// 获取单个配置
+export function paramGetOne(data) {
+  return request({
+    url: '/sys/param/one',
     method: 'get',
     params: data
   })
