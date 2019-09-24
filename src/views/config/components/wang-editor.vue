@@ -111,16 +111,16 @@ export default {
   .editor {
     width: 80%;
     margin: 0 auto;
-  }
-  .toolbar {
-    border: 1px solid #ccc;
-    >div {
-      z-index: 1005!important;
+    .toolbar {
+      border: 1px solid #ccc;
+      >div {
+        z-index: 1005!important;
+      }
     }
-  }
-  .text {
-    border: 1px solid #ccc;
-    height: 450px;
-    z-index: 1000!important;
+    .text {
+      border: 1px solid #ccc;
+      height: 450px;
+      z-index: 1000!important;
+    }
   }
 </style>

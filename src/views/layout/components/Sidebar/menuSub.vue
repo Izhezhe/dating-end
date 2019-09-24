@@ -1,11 +1,11 @@
 <template>
   <el-submenu :index="menu.path">
     <template slot="title">
-      <i v-if="menu.menuIcon" :class="`${menu.menuIcon}`"></i>
+      <!-- <i v-if="menu.menuIcon" :class="`${menu.menuIcon}`"></i>
       <i v-else-if="menu.iconSvg">
         <icon :name="menu.iconSvg"></icon>
       </i>
-      <i v-else class="el-icon-menu"></i>
+      <i v-else class="el-icon-menu"></i> -->
       <span slot="title">{{menu.name}}</span>
     </template>
     <template v-for="(child, childIndex) in menu.childrens">

@@ -1,10 +1,10 @@
 <template>
 	<el-menu-item :index="menu.pageUrl">
-		<i v-if="menu.menuIcon" :class="`${menu.menuIcon}`"></i>
+		<!-- <i v-if="menu.menuIcon" :class="`${menu.menuIcon}`"></i>
     <i v-else-if="menu.iconSvg">
       <icon :name="menu.iconSvg"></icon>
     </i>
-    <i v-else class="el-icon-menu"></i>
+    <i v-else class="el-icon-menu"></i> -->
 		<span slot="title">{{menu.name || '未命名菜单'}}</span>
 	</el-menu-item>
 </template>

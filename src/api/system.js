@@ -65,12 +65,20 @@ export function accountPassReset(data) {
     data
   })
 }
-
 // 删除账号
 export function accountDelete(data) { 
   return request({
     url: '',
     method: 'post',
     data
+  })
+}
+
+// 系统配置
+export function paramGet(data) {
+  return request({
+    url: '/sys/param/all',
+    method: 'get',
+    params: data
   })
 }

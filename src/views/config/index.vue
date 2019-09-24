@@ -2,10 +2,9 @@
   <div class="app-container">
     <!-- <div class="page-title">{{previewData.title}}</div> -->
     <el-tabs v-model="curConfig" @tab-click="handleClick">
-      <el-tab-pane v-for="(item, index) in configType" :key="index" :label="item" :name="item">
-        <div class="remark"><label>备注：</label><el-input v-model="remark" placeholder="请输入备注"></el-input></div>
-      </el-tab-pane>
+      <el-tab-pane v-for="(item, index) in configType" :key="index" :label="item" :name="item"></el-tab-pane>
     </el-tabs>
+    <div class="remark"><label>备注：</label><el-input v-model="remark" placeholder="请输入备注"></el-input></div>
     <editor-bar v-model="editor.info" :isClear="isClear"></editor-bar>
     <div class="page-footer">
       <el-button size="small" @click="isViewShow = true">预览</el-button>
