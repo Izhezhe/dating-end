@@ -20,9 +20,9 @@
       </el-row>
       <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
         <el-table-column label="序号" type="index" width="70"></el-table-column>
-        <el-table-column label="配置code" prop="code"></el-table-column>
+        <el-table-column label="code" prop="code"></el-table-column>
         <el-table-column label="备注" prop="remark"></el-table-column>
-        <el-table-column label="配置">
+        <el-table-column label="值">
           <template slot-scope="scope">
             <div v-if="scope.row.code == 'SYS_INTRO_HTML'">
               <!-- <p>{{scope.row.value.split(',')}}</p> -->
@@ -47,13 +47,13 @@
     <!-- 编辑 -->
     <el-dialog title="编辑系统配置表" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
-        <el-form-item label="配置code" prop="code">
+        <el-form-item label="code" prop="code">
           <el-input v-model="operData.code" disabled></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="operData.remark"></el-input>
         </el-form-item>
-        <el-form-item label="配置" prop="value">
+        <el-form-item label="值" prop="value">
           <el-input v-model="operData.value"></el-input>
         </el-form-item>
       </el-form>
@@ -86,7 +86,7 @@ export default {
       operData: {},
       operRules: {
         remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }, { max: 16, message: '备注最长为16位', trigger: 'blur' }],
-        value: [{ required: true, message: '配置不能为空', trigger: 'blur' }],
+        value: [{ required: true, message: '值不能为空', trigger: 'blur' }],
       }
     }
   },

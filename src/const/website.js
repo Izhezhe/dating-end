@@ -1,7 +1,7 @@
 export default {
   title: '管理',
   logo: 'L',
-  author: 'BY lizz',
+  author: 'Lovindating',
   whiteList: ['/login', '/404', '/401'],
   router: { // 暂时存放
     "id":"34343434333333333334343434333434","name":"菜单","parentId":null,"path":"34343434333333333334343434333434","pageUrl":null,"menuIcon":null,"sort":0,"remark":null,
