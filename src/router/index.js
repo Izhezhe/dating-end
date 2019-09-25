@@ -28,7 +28,13 @@ export default new VueRouter({
           name: '网站关于',
           component: () => import('@/views/config'),
           meta: {title: '网站关于', notCache: true},
-        }
+        },
+        {
+          path: '/reset',
+          name: '修改密码',
+          component: () => import('@/views/login/reset'),
+          meta: '修改密码'
+        },
       ]
     },
     {
@@ -61,12 +67,6 @@ export default new VueRouter({
       name: '登陆',
       component: () => import('@/views/login/login'),
       meta: '登陆'
-    },
-    {
-      path: '/reset',
-      name: '修改密码',
-      component: () => import('@/views/login/reset'),
-      meta: '修改密码'
     },
     {
       path: '*',

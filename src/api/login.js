@@ -21,14 +21,11 @@ export function login(username, password) {
  * @param {string} newpassword 新密码
  * @param {string} newpassword1 确认密码
  */
-export function resetPass(newpassword, newpassword1) {
+export function resetPass(data) {
   return request({
     url: '/account/update/password',
     method: 'post',
-    data: {
-      newpassword,
-      newpassword1
-    }
+    data
   })
 }
 

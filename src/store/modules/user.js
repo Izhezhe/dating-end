@@ -66,9 +66,9 @@ const user = {
     },
 
     // 修改密码
-    ResetPass({ commit }, newPass) {
+    ResetPass({ commit }, data) {
       return new Promise((resolve, reject) => {
-        resetPass(newPass.pass, newPass.checkPass).then(response => {
+        resetPass(data).then(response => {
           commit('SET_TOKEN', '')
           removeToken()
           removeStore({name: 'password'})

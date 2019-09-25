@@ -48,7 +48,7 @@
     <el-dialog title="编辑系统配置表" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
         <el-form-item label="配置code" prop="code">
-          <el-input v-model="operData.code"></el-input>
+          <el-input v-model="operData.code" disabled></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="operData.remark"></el-input>
@@ -85,10 +85,8 @@ export default {
       operVisible: false,
       operData: {},
       operRules: {
-        // username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }, { max: 16, message: '用户名最长为16位', trigger: 'blur' }],
-        // password: [{ required: true, message: '密码不能为空', trigger: 'blur' }, { min: 6, message: '密码最少为6位', trigger: 'blur' }],
-        // email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }, { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
-        // phone: [{ required: true, trigger: 'change', validator: validatePhone }],
+        remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }, { max: 16, message: '备注最长为16位', trigger: 'blur' }],
+        value: [{ required: true, message: '配置不能为空', trigger: 'blur' }],
       }
     }
   },
