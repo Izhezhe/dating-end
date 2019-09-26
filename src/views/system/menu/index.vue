@@ -26,7 +26,7 @@
           <el-table-column label="序号" prop="sort" width="70"></el-table-column>
           <el-table-column label="菜单名称" prop="name"></el-table-column>
           <el-table-column label="页面路径" prop="pageUrl"></el-table-column>
-          <el-table-column label="图标" prop="icon"></el-table-column>
+          <!-- <el-table-column label="图标" prop="icon"></el-table-column> -->
           <el-table-column label="备注" prop="remark"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -58,9 +58,9 @@
         <el-form-item label="序号" prop="sort">
           <el-input v-model="operData.sort"></el-input>
         </el-form-item>
-        <el-form-item label="图标" prop="icon">
+        <!-- <el-form-item label="图标" prop="icon">
           <el-input v-model="operData.icon"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="备注" prop="remark">
           <el-input v-model="operData.remark"></el-input>
         </el-form-item>
