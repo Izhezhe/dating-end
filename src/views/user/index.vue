@@ -15,14 +15,13 @@
       </el-row>
       <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
         <el-table-column label="序号" type="index" width="70"></el-table-column>
-        <el-table-column label="用户名" prop="username"></el-table-column>
+        <el-table-column label="姓名" prop="name"></el-table-column>
         <el-table-column label="角色" prop="role"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="手机号" prop="phone"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
-            <el-link :underline="false" size="small" type="primary" @click="handleResetPass(scope.row.id)">重置密码</el-link>
+            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">查看</el-link>
             <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link>
           </template>
         </el-table-column>
@@ -34,25 +33,15 @@
       </el-row>
     </div>
 
-    <!-- 新增、编辑 -->
-    <el-dialog :title="operTitle[operType]" :visible.sync="operVisible">
+    <!-- 查看 -->
+    <el-dialog title="查看用户信息" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="operData.username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="operType == 'add'">
-          <el-input v-model="operData.password"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="operData.email"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input v-model="operData.phone"></el-input>
-        </el-form-item>
+        <el-form-item label="姓名" prop="name">{{operData.name}}</el-form-item>
+        <el-form-item label="邮箱" prop="email">{{operData.email}}</el-form-item>
+        <el-form-item label="手机号" prop="phone">{{operData.phone}}</el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="operVisible = false">取 消</el-button>
-        <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
+        <el-button @click="operVisible = false">关 闭</el-button>
       </span>
     </el-dialog>
 
@@ -75,26 +64,9 @@ export default {
       total: 0,
       tableData: [],
 
-      // 新增、编辑
+      // 查看
       operVisible: false,
-      operType: 'add',
-      operTitle: {
-        add: '添加系统账号',
-        edit: '编辑系统账号'
-      },
-      operData: {
-        id: '', // id
-        username: '', // 用户名
-        password: '', // 密码
-        email: '', // 邮箱
-        phone: '', // 手机号
-      },
-      operRules: {
-        // username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }, { max: 16, message: '用户名最长为16位', trigger: 'blur' }],
-        // password: [{ required: true, message: '密码不能为空', trigger: 'blur' }, { min: 6, message: '密码最少为6位', trigger: 'blur' }],
-        // email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }, { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
-        // phone: [{ required: true, trigger: 'change', validator: validatePhone }],
-      }
+      operData: {}
     }
   },
   created() {
@@ -105,7 +77,7 @@ export default {
       if(b) {
         this.filters.pageNumber = 1
       }
-      accountGet(this.filters).then(res => {
+      userGet(this.filters).then(res => {
         this.tableData = res.datas.pageData
         this.total = res.datas.totalElements
       })
@@ -115,66 +87,22 @@ export default {
       this.getList()
     },
 
-    // 新增
-    handleAdd() {
-      this.operVisible = true
-      this.operType = 'add'
-      this.resetData()
-    },
-    // 编辑
+    // 查看
     handleEdit(row) {
       this.operVisible = true
-      this.operType = 'edit'
       this.operData = row
-    },
-    // 保存
-    operSave(formName) {
-      this.$refs[formName].validate((valid) => {
-				if(valid) {
-          if (this.operType == 'add') {
-            accountAdd(this.operData).then(res => {
-              this.$message({
-                message: res.repMsg,
-                type: 'success'
-              })
-              this.operVisible = false
-              this.getList(true)
-            })
-          } else {
-            accountUpdate(this.operData).then(res => {
-              this.$message({
-                message: res.repMsg,
-                type: 'success'
-              })
-              this.operVisible = false
-              this.getList()
-            })
-          }
-        }
-      })
-    },
-    // 重置密码
-    handleResetPass(id) {
-      this.$confirm('确定重置密码？', '提示', {type: 'warning'}).then(() => {
-        accountPassReset({id: id}).then(res => {
-          this.$message({
-            message: res.repMsg,
-            type: 'success'
-          })
-        })
-      })
     },
     // 删除
     handleDelete(id) {
-      this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
-        accountDelete({id: id}).then(res => {
-          this.$message({
-            message: res.repMsg,
-            type: 'success'
-          })
-          this.getList(true)
-        })
-      })
+      // this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
+      //   accountDelete({id: id}).then(res => {
+      //     this.$message({
+      //       message: res.repMsg,
+      //       type: 'success'
+      //     })
+      //     this.getList(true)
+      //   })
+      // })
     },
     filtersReset() {
       this.filters = {
@@ -184,15 +112,6 @@ export default {
         phone: '',
       }
       this.getList(true)
-    },
-    resetData() {
-      this.operData = {
-        id: '', // id
-        username: '', // 用户名
-        password: '', // 密码
-        email: '', // 邮箱
-        phone: '', // 手机号
-      }
     },
   }
 }
