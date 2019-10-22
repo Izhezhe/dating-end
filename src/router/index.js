@@ -24,10 +24,16 @@ export default new VueRouter({
           meta: {title: '用户管理', notCache: true},
         },
         {
-          path: '/config',
-          name: '网站关于',
+          path: '/docu',
+          name: '文档管理',
+          component: () => import('@/views/docu'),
+          meta: {title: '文档管理', notCache: true},
+        },
+        {
+          path: 'config',
+          name: '配置管理',
           component: () => import('@/views/config'),
-          meta: {title: '网站关于', notCache: true},
+          meta: {title: '配置管理', notCache: true},
         },
         {
           path: '/reset',
@@ -52,12 +58,6 @@ export default new VueRouter({
           name: '菜单管理',
           component: () => import('@/views/system/menu'),
           meta: {title: '菜单管理', notCache: true},
-        },
-        {
-          path: 'config',
-          name: '系统配置',
-          component: () => import('@/views/system/config'),
-          meta: {title: '系统配置', notCache: true},
         },
       ]
     },

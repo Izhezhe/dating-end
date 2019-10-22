@@ -1,90 +1,112 @@
 <template>
   <div class="app-container">
-    <!-- <div class="page-title">{{previewData.title}}</div> -->
-    <el-tabs v-model="curConfig" @tab-click="handleClick">
-      <el-tab-pane v-for="(item, index) in configType" :key="index" :label="item" :name="item"></el-tab-pane>
-    </el-tabs>
-    <div class="remark"><label>备注：</label><el-input v-model="remark" placeholder="请输入备注"></el-input></div>
-    <editor-bar v-model="editor.info" :isClear="isClear"></editor-bar>
-    <div class="page-footer">
-      <el-button size="small" @click="isViewShow = true">预览</el-button>
-      <el-button size="small" type="primary" @click="save()">保存</el-button>
+    <div class="wrapper">
+      <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
+        <el-table-column label="序号" type="index" width="70"></el-table-column>
+        <el-table-column label="code" prop="code"></el-table-column>
+        <el-table-column label="备注" prop="remark"></el-table-column>
+        <el-table-column label="值">
+          <template slot-scope="scope">
+            <p v-for="(item, index) in scope.row.value.split(',')" :key="index">{{item}}</p>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--工具条-->
+      <el-row class="toolbar toolbar-bottom" v-if="total!=0">
+        <el-pagination layout="total, prev, pager, next" @current-change="handleCurrentChange" :current-page.sync="filters.pageNumber" :page-size="filters.pageSize" :total="total" style="float:right;">
+        </el-pagination>
+      </el-row>
     </div>
-    <preview @viewHide="isViewShow = false" :viewVisible="isViewShow" :title="curConfig" :data="editor.info"></preview>
+
+    <!-- 编辑 -->
+    <el-dialog title="编辑系统配置表" :visible.sync="operVisible">
+      <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
+        <el-form-item label="code" prop="code">
+          <el-input v-model="operData.code" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="operData.remark"></el-input>
+        </el-form-item>
+        <el-form-item label="值" prop="value">
+          <el-input type="textarea" v-model="operData.value" style="min-height: 60px;"></el-input>
+          <p style="color: red;">每个字段之间，用英文逗号隔开</p>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="operVisible = false">取 消</el-button>
+        <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { tempGet, tempSave } from '@/api/config'
-import EditorBar from './components/wang-editor'
-import Preview from './components/preview'
+import { mapGetters } from 'vuex'
+import { paramGet, paramUpdate } from '@/api/system'
 export default {
-  name: 'about',
+  name: 'sys-config',
   data() {
     return {
-      curConfig: 'About',
-      configType: '',
-      remark: '',
-
-      editor: {
-        info: ''
+      // 查询条件
+      filters: {
+        pageNumber: 1,
+        pageSize: 10,
       },
-      isClear: false,
-      isViewShow: false,
+      total: 0,
+      tableData: [],
+
+      // 编辑
+      operVisible: false,
+      addValue: '',
+      operData: {},
+      operRules: {
+        remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }, { max: 16, message: '备注最长为16位', trigger: 'blur' }],
+        value: [{ required: true, message: '值不能为空', trigger: 'blur' }],
+      }
     }
   },
-  mounted() {
-    this.getType()
+  computed: {
+    ...mapGetters(['roles'])
+  },
+  created() {
     this.getList()
   },
   methods: {
-    handleClick() {
-      this.getList();
-    },
     getList() {
-      tempGet({code: this.curConfig}).then(res => {
-        this.editor.info = res.datas.content
-        this.remark = res.datas.remark
-      })
-    },
-    getType() {
-      this.$store.dispatch('GetParam', 'SYS_INTRO_HTML').then(res => {
-        this.configType = res.datas.value.split(',')
+      paramGet().then(res => {
+        this.tableData = res.datas.pageData
+        this.total = res.datas.totalElements
       })
     },
 
+     // 编辑
+    handleEdit(row) {
+      this.operVisible = true
+      this.operData = row
+      this.addValue = ''
+    },
     // 保存
-    save() {
-      const data = {
-        code: this.curConfig,
-        content: this.editor.info,
-        remark: this.remark
-      }
-      tempSave(data).then(res => {
-        this.$message({
-          message: res.repMsg,
-          type: 'success'
-        })
+    operSave(formName) {
+      this.$refs[formName].validate((valid) => {
+				if(valid) {
+          paramUpdate(this.operData).then(res => {
+            this.$message({
+              message: res.repMsg,
+              type: 'success'
+            })
+            this.operVisible = false
+            this.getList(true)
+          })
+        }
       })
     },
-  },
-  components: {
-    EditorBar,
-    Preview,
-  },
+
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-  .remark {
-    width: 80%;
-    margin: 0 auto 10px;
-    label {
-      display: inline-block;
-      width: 50px;
-    }
-    .el-input {
-      width: calc(100% - 50px);
-    }
-  }
-</style>
