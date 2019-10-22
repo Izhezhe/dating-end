@@ -26,14 +26,11 @@
     <!-- 编辑 -->
     <el-dialog title="编辑系统配置表" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
-        <el-form-item label="code" prop="code">
-          <el-input v-model="operData.code" disabled></el-input>
-        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="operData.remark"></el-input>
         </el-form-item>
         <el-form-item label="值" prop="value">
-          <el-input type="textarea" v-model="operData.value" style="min-height: 60px;"></el-input>
+          <el-input autosize type="textarea" v-model="operData.value"></el-input>
           <p style="color: red;">每个字段之间，用英文逗号隔开</p>
         </el-form-item>
       </el-form>

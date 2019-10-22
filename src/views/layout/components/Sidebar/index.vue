@@ -49,7 +49,7 @@ export default {
       'menu_routers'
     ]),
     isCollapse() {
-      return !this.sidebar.opened
+      // return !this.sidebar.opened
     },
   },
   methods: {

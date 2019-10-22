@@ -1,9 +1,11 @@
 <template>
-  <el-dialog :title="title" :visible.sync="viewVisible" width="890px" @close="close()">
-    <div v-html="data">
-      {{data}}
-    </div>
-  </el-dialog>
+  <div class="document-box">
+    <el-dialog :title="title" :visible.sync="viewVisible" width="890px" @close="close()">
+      <div v-html="data">
+        {{data}}
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -31,13 +33,11 @@ export default {
 }
 </script>
 
-<style scoped>
-  el-dialog {
-    max-width: 890px;
-    width: auto;
-    min-width: 280px;
-    padding: 50px 75px;
-    background: #b8dbf0;
-  }
-
+<style type="text/css">
+.document-box .el-dialog__header {
+  text-align: center;
+}
+.document-box .el-dialog__body * {
+  line-height: 1.5em;
+}
 </style>
