@@ -51,7 +51,7 @@ table {
 
 /* custom */
 a {
-  color: #7e8c8d;
+  // color: #7e8c8d;
   -webkit-backface-visibility: hidden;
   text-decoration: none;
 }
@@ -242,4 +242,9 @@ body {
       line-height: 16px;
     }
   }
+}
+
+.el-dialog__body {
+  color: #222;
+  font-size: 16px;
 }
