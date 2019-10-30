@@ -8,3 +8,12 @@ export function userGet(data) {
     params: data
   })
 }
+
+// 推荐
+export function setRecomApi(data) {
+  return request({
+    url: '/user/recom',
+    method: 'post',
+    data
+  })
+}
