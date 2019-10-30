@@ -9,6 +9,13 @@
           <el-input size="small" v-model="filters.phone" placeholder="请输入手机号"></el-input>
         </el-col>
         <el-col :span="6">
+          <!-- <el-select v-model="filter.role" placeholder="请选择用户状态">
+            <el-option label="待审核" value="0"></el-option>
+            <el-option label="审核通过" value="1"></el-option>
+            <el-option label="审核不通过" value="2"></el-option>
+          </el-select> -->
+        </el-col>
+        <el-col :span="6">
           <el-button size="small" type="primary" @click="getList(true)">查询</el-button>
           <el-button size="small" @click="filtersReset()">重置</el-button>
         </el-col>
@@ -16,13 +23,14 @@
       <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
         <el-table-column label="序号" type="index" width="70"></el-table-column>
         <el-table-column label="姓名" prop="name"></el-table-column>
-        <el-table-column label="角色" prop="role"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="手机号" prop="phone"></el-table-column>
+        <el-table-column label="角色" prop="role"></el-table-column>
+        <el-table-column label="审核状态" prop="role"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">查看</el-link>
-            <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link>
+            <!-- <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link> -->
           </template>
         </el-table-column>
       </el-table>
@@ -45,6 +53,8 @@
       </span>
     </el-dialog>
 
+    <!-- 审核 -->
+
   </div>
 </template>
 
@@ -60,6 +70,7 @@ export default {
         pageSize: 10,
         name: '',
         phone: '',
+        // role: '',
       },
       total: 0,
       tableData: [],
@@ -110,6 +121,7 @@ export default {
         pageSize: 10,
         name: '',
         phone: '',
+        // role: '',
       }
       this.getList(true)
     },
