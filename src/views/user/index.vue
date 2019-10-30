@@ -9,18 +9,23 @@
           <el-input size="small" v-model="filters.phone" placeholder="请输入手机号"></el-input>
         </el-col>
         <el-col :span="6">
+          <el-input size="small" v-model="filters.email" placeholder="请输入邮箱"></el-input>
+        </el-col>
+        <el-col :span="6">
             <el-select size="small" v-model="filters.role" clearable placeholder="请选择角色">
               <el-option label="普通用户" value="common"></el-option>
               <el-option label="客服" value="member"></el-option>
             </el-select>
         </el-col>
+      </el-row>
+      <el-row :gutter="23" class="search-wrapper mb">
         <el-col :span="6">
             <el-select size="small" v-model="filters.isRecom" clearable placeholder="请选择是否推荐">
               <el-option label="推荐" value="true"></el-option>
               <el-option label="未推荐" value="false"></el-option>
             </el-select>
         </el-col>
-        <el-col :span="6" style="margin-top: 10px;">
+        <el-col :span="6">
           <el-button size="small" type="primary" @click="getList(true)">查询</el-button>
           <el-button size="small" @click="filtersReset()">重置</el-button>
         </el-col>
@@ -86,6 +91,7 @@ export default {
         pageSize: 10,
         name: '',
         phone: '',
+        email: '',
         role: '',
         isRecom: '',
       },
@@ -148,6 +154,7 @@ export default {
         pageSize: 10,
         name: '',
         phone: '',
+        email: '',
         role: '',
         isRecom: '',
       }
