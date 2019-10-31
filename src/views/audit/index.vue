@@ -63,7 +63,7 @@
           <el-image :src="operData.idcardBack" fil="contain" class="idcard-image"></el-image>
         </el-form-item>
         <el-form-item label="审核" prop="status">
-          <el-select size="small" v-model="operData.status" placeholder="请选择审核状态">
+          <el-select v-model="operData.status" placeholder="请选择审核状态">
             <el-option label="驳回" value="reject"></el-option>
             <el-option label="通过" value="finish"></el-option>
           </el-select>

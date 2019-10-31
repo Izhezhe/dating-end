@@ -128,13 +128,30 @@ export default {
     },
     // 推荐
     toRecom(id, boolean) {
-      const data = {
-        id: id,
-        isRecom: boolean
+      let tip = ''
+      if (boolean) {
+        tip = '推荐到首页？'
+      } else {
+        tip = '从首页取消推荐？'
       }
-      setRecomApi(data).then(res => {
-        this.getList()
-      })
+      this.$confirm(tip, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const data = {
+            id: id,
+            isRecom: boolean
+          }
+          setRecomApi(data).then(res => {
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            });
+            this.getList()
+          })
+        }).catch(() => {});
+      
     },
     // 删除
     handleDelete(id) {
