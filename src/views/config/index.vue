@@ -85,7 +85,7 @@ export default {
      // 编辑
     handleEdit(row) {
       this.operVisible = true
-      this.operData = row
+      this.operData = JSON.parse(JSON.stringify(row))
       this.addValue = ''
     },
     // 保存

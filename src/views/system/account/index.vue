@@ -138,7 +138,7 @@ export default {
     handleEdit(row) {
       this.operVisible = true
       this.operType = 'edit'
-      this.operData = row
+      this.operData = JSON.parse(JSON.stringify(row))
     },
     // 保存
     operSave(formName) {

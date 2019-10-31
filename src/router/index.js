@@ -7,7 +7,7 @@ export default new VueRouter({
     {
       path: '/',
       redirect: {
-        path: '/index'
+        path: '/user'
       },
       component: Layout,
       children: [
@@ -30,7 +30,13 @@ export default new VueRouter({
           meta: {title: '文档管理', notCache: true},
         },
         {
-          path: 'config',
+          path: '/audit',
+          name: '审核管理',
+          component: () => import('@/views/audit'),
+          meta: {title: '审核管理', notCache: true},
+        },
+        {
+          path: '/config',
           name: '配置管理',
           component: () => import('@/views/config'),
           meta: {title: '配置管理', notCache: true},

@@ -6,24 +6,14 @@
           <el-input size="small" v-model="filters.name" placeholder="请输入姓名"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-input size="small" v-model="filters.phone" placeholder="请输入手机号"></el-input>
-        </el-col>
-        <el-col :span="6">
           <el-input size="small" v-model="filters.email" placeholder="请输入邮箱"></el-input>
         </el-col>
         <el-col :span="6">
-            <el-select size="small" v-model="filters.role" clearable placeholder="请选择角色">
-              <el-option label="普通用户" value="common"></el-option>
-              <el-option label="客服" value="member"></el-option>
-            </el-select>
-        </el-col>
-      </el-row>
-      <el-row :gutter="23" class="search-wrapper mb">
-        <el-col :span="6">
-            <el-select size="small" v-model="filters.isRecom" clearable placeholder="请选择是否推荐">
-              <el-option label="推荐" value="true"></el-option>
-              <el-option label="未推荐" value="false"></el-option>
-            </el-select>
+          <el-select size="small" v-model="filters.role" clearable placeholder="请选择审核状态">
+            <el-option label="待审核" value="init"></el-option>
+            <el-option label="驳回" value="reject"></el-option>
+            <el-option label="通过" value="finish"></el-option>
+          </el-select>
         </el-col>
         <el-col :span="6">
           <el-button size="small" type="primary" @click="getList(true)">查询</el-button>
@@ -40,18 +30,16 @@
             {{scope.row.role == 'common' ? '普通用户':'客服'}}
           </template>
         </el-table-column>
-        <el-table-column label="首页推荐">
+        <el-table-column label="审核状态">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.isRecom == 'true'">推荐</el-tag>
-            <el-tag v-else type="info">未推荐</el-tag>
+            <el-tag v-if="scope.row.status == 'init'" type="info">待审核</el-tag>
+            <el-tag v-if="scope.row.status == 'reject'" type="danger">驳回</el-tag>
+            <el-tag v-if="scope.row.status == 'finish'">通过</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">查看</el-link>
-            <el-link :underline="false" size="small" type="primary" @click="toRecom(scope.row.id, true)" v-if="scope.row.isRecom == 'false'">推荐</el-link>
-            <el-link :underline="false" size="small" type="primary" @click="toRecom(scope.row.id, false)" v-else>取消推荐</el-link>
-            <!-- <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link> -->
+            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -62,25 +50,40 @@
       </el-row>
     </div>
 
-    <!-- 查看 -->
-    <el-dialog title="查看用户信息" :visible.sync="operVisible">
+    <!-- 编辑 -->
+    <el-dialog title="客服审核" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
-        <el-form-item label="姓名" prop="name">{{operData.name}}</el-form-item>
-        <el-form-item label="邮箱" prop="email">{{operData.email}}</el-form-item>
-        <el-form-item label="手机号" prop="phone">{{operData.phone}}</el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="operData.name"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证正面">
+          <el-image :src="operData.idcardFront" fil="contain" class="idcard-image"></el-image>
+        </el-form-item>
+        <el-form-item label="身份证反面">
+          <el-image :src="operData.idcardBack" fil="contain" class="idcard-image"></el-image>
+        </el-form-item>
+        <el-form-item label="审核" prop="status">
+          <el-select size="small" v-model="operData.status" placeholder="请选择审核状态">
+            <el-option label="驳回" value="reject"></el-option>
+            <el-option label="通过" value="finish"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="驳回原因" prop="advice">
+          <el-input autosize type="textarea" v-model="operData.advice"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="operVisible = false">关 闭</el-button>
+        <el-button @click="operVisible = false">取 消</el-button>
+        <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
       </span>
     </el-dialog>
-
-    <!-- 审核 -->
 
   </div>
 </template>
 
 <script>
-import { userGet, setRecomApi } from '@/api/user'
+import zzUpload from '@/components/zz-upload'
+import { getAuditApi } from '@/api/audit'
 export default {
   name: 'account',
   data() {
@@ -90,18 +93,23 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         name: '',
-        phone: '',
         email: '',
-        role: '',
-        isRecom: '',
+        status: '',
       },
       total: 0,
       tableData: [],
 
       // 查看
       operVisible: false,
-      operData: {}
+      operData: {},
+      operRules: {
+        name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+        status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+      }
     }
+  },
+  components: {
+    zzUpload
   },
   created() {
     this.getList()
@@ -111,7 +119,7 @@ export default {
       if(b) {
         this.filters.pageNumber = 1
       }
-      userGet(this.filters).then(res => {
+      getAuditApi(this.filters).then(res => {
         this.tableData = res.datas.pageData
         this.total = res.datas.totalElements
       })
@@ -121,42 +129,38 @@ export default {
       this.getList()
     },
 
-    // 查看
+    // 编辑
     handleEdit(row) {
       this.operVisible = true
       this.operData = JSON.parse(JSON.stringify(row))
-    },
-    // 推荐
-    toRecom(id, boolean) {
-      const data = {
-        id: id,
-        isRecom: boolean
+      if(this.operData.status == 'init') {
+        this.operData.status = ''
       }
-      setRecomApi(data).then(res => {
-        this.getList()
-      })
     },
-    // 删除
-    handleDelete(id) {
-      // this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
-      //   accountDelete({id: id}).then(res => {
-      //     this.$message({
-      //       message: res.repMsg,
-      //       type: 'success'
-      //     })
-      //     this.getList(true)
-      //   })
-      // })
+    // 审核
+    // 保存
+    operSave(formName) {
+      this.$refs[formName].validate((valid) => {
+				if(valid) {
+          menuUpdate(this.operData).then(res => {
+            this.$message({
+              message: res.repMsg,
+              type: 'success'
+            })
+            this.operVisible = false
+            this.getMenuTree()
+            this.getList()
+          })
+        }
+      })
     },
     filtersReset() {
       this.filters = {
         pageNumber: 1,
         pageSize: 10,
         name: '',
-        phone: '',
         email: '',
-        role: '',
-        isRecom: '',
+        status: '',
       }
       this.getList(true)
     },
