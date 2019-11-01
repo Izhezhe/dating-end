@@ -83,7 +83,7 @@ export function isValidateCode(val) {
   const list = []
   let result = true
   let msg = ''
-  var isReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+  var isReg = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
   if (!validatenull(val)) {
     if (val.length == 18) {
       if (!isReg.test(val)) {
@@ -97,6 +97,34 @@ export function isValidateCode(val) {
   } else {
     msg = '身份证号不能为空'
   }
+
+  // if(regIdCard.test(idCard)){
+  //   if(idCard.length === 18){
+  //     let idCardWi = new Array( 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 );
+  //     let idCardY = new Array( 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 );
+  //     let idCardWiSum = 0
+  //     for(let i=0;i<17;i++){
+  //       idCardWiSum+=idCard.substring(i,i+1)*idCardWi[i];
+  //     }
+  //     let idCardMod=idCardWiSum%11
+  //     let idCardLast=idCard.substring(17)
+  //     if(idCardMod === 2){
+  //       if(idCardLast === "X"||idCardLast === "x"){
+  //         result = false
+  //       }else{
+  //         msg = '身份证号码错误!，请重新输入'
+  //       }
+  //     }else{
+  //       if(idCardLast === idCardY[idCardMod]){
+  //         result = false
+  //       }else{
+  //         msg = '身份证号码错误!，请重新输入'
+  //       }
+  //     }
+  //   }
+  // }else{
+  //   msg = '身份证号码错误!，请重新输入'
+  // }
   list.push(result)
   list.push(msg)
   return list

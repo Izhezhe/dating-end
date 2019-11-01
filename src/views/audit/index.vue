@@ -39,7 +39,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
+            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row.id)">编辑</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -56,19 +56,22 @@
         <el-form-item label="姓名" prop="name">
           <el-input v-model="operData.name"></el-input>
         </el-form-item>
-        <el-form-item label="身份证正面">
-          <el-image :src="operData.idcardFront" fil="contain" class="idcard-image"></el-image>
-        </el-form-item>
-        <el-form-item label="身份证反面">
-          <el-image :src="operData.idcardBack" fil="contain" class="idcard-image"></el-image>
-        </el-form-item>
         <el-form-item label="审核" prop="status">
           <el-select v-model="operData.status" placeholder="请选择审核状态">
             <el-option label="驳回" value="reject"></el-option>
             <el-option label="通过" value="finish"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="驳回原因" prop="advice">
+        <el-form-item label="身份证正面">
+          <el-image v-if="operData.idcardFront != ''" :src="operData.idcardFront" fil="contain" class="idcard-image"></el-image>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="idcardNum">
+          <el-input v-model="operData.idcardNum"></el-input>
+        </el-form-item>
+        <el-form-item label="出生日期" prop="birthday">
+          <el-date-picker v-model="operData.birthday" type="date" placeholder="选择日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="审核原因" :prop="operData.status == 'reject' ? 'advice':''">
           <el-input autosize type="textarea" v-model="operData.advice"></el-input>
         </el-form-item>
       </el-form>
@@ -83,10 +86,18 @@
 
 <script>
 import zzUpload from '@/components/zz-upload'
-import { getAuditApi } from '@/api/audit'
+import { isValidateCode } from '@/utils/validate'
+import { getAuditApi, logAuditApi, updateAuditApi } from '@/api/audit'
 export default {
   name: 'account',
   data() {
+    const validateCode = (rule, value, callback) => {
+      if (isValidateCode(value)[0]) {
+        callback(new Error(isValidateCode(value)[1]))
+      } else {
+        callback()
+      }
+    }
     return {
       // 查询条件
       filters: {
@@ -104,7 +115,10 @@ export default {
       operData: {},
       operRules: {
         name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
-        status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+        status: [{ required: true, message: '状态不能为空', trigger: 'change' }],
+        idcardNum: [{ required: true, message: '身份证号不能为空', trigger: 'change' }],
+        birthday: [{ required: true, message: '出生日期不能为空', trigger: 'blur' }],
+        advice: [{ required: true, message: '驳回时', trigger: 'blur' }],
       }
     }
   },
@@ -130,25 +144,25 @@ export default {
     },
 
     // 编辑
-    handleEdit(row) {
+    handleEdit(id) {
       this.operVisible = true
-      this.operData = JSON.parse(JSON.stringify(row))
-      if(this.operData.status == 'init') {
-        this.operData.status = ''
-      }
+      logAuditApi(id).then(res => {
+        if (res.datas.status == 'init') {
+          res.datas.status = ''
+        }
+        this.operData = res.datas
+      })
     },
     // 审核
-    // 保存
     operSave(formName) {
       this.$refs[formName].validate((valid) => {
 				if(valid) {
-          menuUpdate(this.operData).then(res => {
+          updateAuditApi(this.operData).then(res => {
             this.$message({
               message: res.repMsg,
               type: 'success'
             })
             this.operVisible = false
-            this.getMenuTree()
             this.getList()
           })
         }
