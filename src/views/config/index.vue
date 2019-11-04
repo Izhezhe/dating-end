@@ -31,7 +31,7 @@
         </el-form-item>
         <el-form-item label="值" prop="value">
           <el-input autosize type="textarea" v-model="operData.value"></el-input>
-          <p style="color: red;">每个字段之间，用英文逗号隔开</p>
+          <p style="color: red;">若值是多个字段，需用英文逗号","隔开</p>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

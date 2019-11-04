@@ -1,5 +1,14 @@
 <template>
   <div class="app-container">
+    <div class="wrapper mb">
+      <el-row :gutter="23" class="search-wrapper">
+        <el-col :span="12">
+          <span>{{promCode}}</span>
+          <el-button size="small" @click="updateProm()">更新促销码</el-button>
+        </el-col>
+      </el-row>
+    </div>
+
     <div class="wrapper">
       <el-row :gutter="23" class="search-wrapper mb">
         <el-col :span="6">
@@ -87,7 +96,7 @@
 <script>
 import zzUpload from '@/components/zz-upload'
 import { isValidateCode } from '@/utils/validate'
-import { getAuditApi, logAuditApi, updateAuditApi } from '@/api/audit'
+import { getAuditApi, logAuditApi, updateAuditApi, getPromApi, updatePromApi } from '@/api/audit'
 export default {
   name: 'account',
   data() {
@@ -119,7 +128,10 @@ export default {
         idcardNum: [{ required: true, message: '身份证号不能为空', trigger: 'change' }],
         birthday: [{ required: true, message: '出生日期不能为空', trigger: 'blur' }],
         advice: [{ required: true, message: '驳回时', trigger: 'blur' }],
-      }
+      },
+
+      // 促销码
+      promCode: '',
     }
   },
   components: {
@@ -127,6 +139,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getProm()
   },
   methods: {
     getList(b=false) {
@@ -178,6 +191,17 @@ export default {
       }
       this.getList(true)
     },
+
+    getProm() {
+      getPromApi().then(res => {
+        this.promCode = res.datas
+      })
+    },
+    updateProm() {
+      updatePromApi().then(res => {
+        this.promCode = res.datas
+      })
+    }
   }
 }
 </script>
