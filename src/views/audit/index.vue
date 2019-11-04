@@ -3,8 +3,9 @@
     <div class="wrapper mb">
       <el-row :gutter="23" class="search-wrapper">
         <el-col :span="12">
-          <span>{{promCode}}</span>
-          <el-button size="small" @click="updateProm()">更新促销码</el-button>
+          <span>当前促销码：</span>
+          <span style="margin-right: 20px;">{{promCode}}</span>
+          <el-button size="small" @click="updateProm()">立即更新</el-button>
         </el-col>
       </el-row>
     </div>
