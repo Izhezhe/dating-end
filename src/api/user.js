@@ -17,3 +17,12 @@ export function setRecomApi(data) {
     data
   })
 }
+
+// 修改用户信息
+export function updateUser(data) {
+  return request({
+    url: '/user/base',
+    method: 'post',
+    data
+  })
+}

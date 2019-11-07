@@ -48,7 +48,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">查看</el-link>
+            <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
             <el-link :underline="false" size="small" type="primary" @click="toRecom(scope.row.id, true)" v-if="scope.row.isRecom == 'false'">推荐</el-link>
             <el-link :underline="false" size="small" type="primary" @click="toRecom(scope.row.id, false)" v-else>取消推荐</el-link>
             <!-- <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link> -->
@@ -65,22 +65,33 @@
     <!-- 查看 -->
     <el-dialog title="查看用户信息" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="100px">
-        <el-form-item label="姓名" prop="name">{{operData.name}}</el-form-item>
-        <el-form-item label="邮箱" prop="email">{{operData.email}}</el-form-item>
-        <el-form-item label="手机号" prop="phone">{{operData.phone}}</el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="operData.name"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="operData.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="operData.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="role">
+          <el-select v-model="operData.role" placeholder="请选择角色">
+            <el-option label="普通用户" value="common"></el-option>
+            <el-option label="客服" value="member"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="operVisible = false">关 闭</el-button>
+        <el-button @click="operVisible = false">取 消</el-button>
+        <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
       </span>
     </el-dialog>
-
-    <!-- 审核 -->
 
   </div>
 </template>
 
 <script>
-import { userGet, setRecomApi } from '@/api/user'
+import { userGet, setRecomApi, updateUser } from '@/api/user'
 export default {
   name: 'account',
   data() {
@@ -98,9 +109,15 @@ export default {
       total: 0,
       tableData: [],
 
-      // 查看
+      // 编辑
       operVisible: false,
-      operData: {}
+      operData: {},
+      operRules: {
+        name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
+        email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
+        // phone: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
+        role: [{ required: true, message: '角色不能为空', trigger: 'change' }],
+      }
     }
   },
   created() {
@@ -121,10 +138,25 @@ export default {
       this.getList()
     },
 
-    // 查看
+    // 编辑
     handleEdit(row) {
       this.operVisible = true
       this.operData = JSON.parse(JSON.stringify(row))
+    },
+    // 保存
+    operSave(formName) {
+      this.$refs[formName].validate((valid) => {
+				if(valid) {
+          updateUser(this.operData).then(res => {
+            this.$message({
+              message: res.repMsg,
+              type: 'success'
+            })
+            this.operVisible = false
+            this.getList(true)
+          })
+        }
+      })
     },
     // 推荐
     toRecom(id, boolean) {
