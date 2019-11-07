@@ -6,10 +6,10 @@
           <el-input size="small" v-model="filters.name" placeholder="请输入姓名"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-input size="small" v-model="filters.phone" placeholder="请输入手机号"></el-input>
+          <el-input size="small" v-model="filters.email" placeholder="请输入邮箱"></el-input>
         </el-col>
         <el-col :span="6">
-          <el-input size="small" v-model="filters.email" placeholder="请输入邮箱"></el-input>
+          <el-input size="small" v-model="filters.phone" placeholder="请输入手机号"></el-input>
         </el-col>
         <el-col :span="6">
             <el-select size="small" v-model="filters.role" clearable placeholder="请选择角色">
