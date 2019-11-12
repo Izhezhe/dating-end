@@ -74,10 +74,7 @@ export default new VueRouter({
       component: () => import('@/views/login/login'),
       meta: '登陆'
     },
-    {
-      path: '*',
-      redirect: '/404',
-      component: () => import('@/views/errorPage/404'),
-    }
+    { path: '/404', component: () => import('@/views/errorPage/404') },
+    { path: '*', redirect: '/404'},
   ]
 })

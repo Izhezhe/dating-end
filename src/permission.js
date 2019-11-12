@@ -6,7 +6,7 @@ import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // 验权
 import { setTitle } from '@/utils/util' // 设置浏览器头部标题
 
-const whiteList = ['/login'] // 不重定向白名单
+const whiteList = ['/login', '/404'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   // NProgress.start()
   // 设置浏览器头部标题
