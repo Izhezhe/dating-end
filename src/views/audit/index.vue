@@ -79,7 +79,7 @@
           <el-input v-model="operData.idcardNum"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="birthday">
-          <el-date-picker v-model="operData.birthday" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker v-model="operData.birthday" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
         </el-form-item>
         <el-form-item label="审核原因" :prop="operData.status == 'reject' ? 'advice':''">
           <el-input autosize type="textarea" v-model="operData.advice"></el-input>
