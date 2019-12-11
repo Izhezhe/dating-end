@@ -36,6 +36,12 @@ export default new VueRouter({
           meta: {title: '审核管理', notCache: true},
         },
         {
+          path: '/gift',
+          name: '礼物管理',
+          component: () => import('@/views/gift'),
+          meta: {title: '礼物管理', notCache: true},
+        },
+        {
           path: '/config',
           name: '配置管理',
           component: () => import('@/views/config'),
