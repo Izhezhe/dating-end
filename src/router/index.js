@@ -36,12 +36,6 @@ export default new VueRouter({
           meta: {title: '审核管理', notCache: true},
         },
         {
-          path: '/gift',
-          name: '礼物管理',
-          component: () => import('@/views/gift'),
-          meta: {title: '礼物管理', notCache: true},
-        },
-        {
           path: '/config',
           name: '配置管理',
           component: () => import('@/views/config'),
@@ -52,6 +46,24 @@ export default new VueRouter({
           name: '修改密码',
           component: () => import('@/views/login/reset'),
           meta: '修改密码'
+        },
+      ]
+    },
+    {
+      path: '/gift',
+      component: Layout,
+      children: [
+        {
+          path: 'chat',
+          name: '聊天礼物',
+          component: () => import('@/views/gift/chat'),
+          meta: {title: '聊天礼物', notCache: true},
+        },
+        {
+          path: 'mall',
+          name: '商城礼物',
+          component: () => import('@/views/gift/mall'),
+          meta: {title: '商城礼物', notCache: true},
         },
       ]
     },
