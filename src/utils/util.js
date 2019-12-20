@@ -15,7 +15,7 @@ export const loadStyle = url => {
  */
 export const setTitle = function(title) {
   title = title ? `${title}` : 'saas'
-  window.document.title = title + '-业务管理'
+  window.document.title = title
 }
 
 /**

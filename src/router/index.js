@@ -36,12 +36,6 @@ export default new VueRouter({
           meta: {title: '审核管理', notCache: true},
         },
         {
-          path: '/config',
-          name: '配置管理',
-          component: () => import('@/views/config'),
-          meta: {title: '配置管理', notCache: true},
-        },
-        {
           path: '/reset',
           name: '修改密码',
           component: () => import('@/views/login/reset'),
@@ -66,6 +60,31 @@ export default new VueRouter({
           meta: {title: '商城礼物', notCache: true},
         },
       ]
+    },
+    {
+      path: '/config',
+      component: Layout,
+      children: [
+        {
+          path: 'value',
+          name: '默认值配置',
+          component: () => import('@/views/config/value'),
+          meta: {title: '默认值配置', notCache: true},
+        },
+        {
+          path: 'img',
+          name: '默认图片配置',
+          component: () => import('@/views/config/img'),
+          meta: {title: '默认图片配置', notCache: true},
+        },
+        {
+          path: 'banner',
+          name: '多背景图片配置',
+          component: () => import('@/views/config/banner'),
+          meta: {title: '多背景图片配置', notCache: true},
+        },
+      ]
+      
     },
     {
       path: '/system',

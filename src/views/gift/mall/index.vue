@@ -17,12 +17,14 @@
       </el-row>
       <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
         <el-table-column label="序号" type="index" width="70"></el-table-column>
+        <el-table-column label="商品名称" prop="name"></el-table-column>
         <el-table-column label="图片">
           <template slot-scope="scope">
             <el-image :src="scope.row.imageUrl" fit="contain" class="upload-img"></el-image>
           </template>
         </el-table-column>
         <el-table-column label="价格（credits）" prop="credits"></el-table-column>
+        <el-table-column label="商品介绍" prop="description"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
@@ -40,12 +42,18 @@
     <!-- 新增、编辑 -->
     <el-dialog :title="operTitle[operType]" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="150px">
+        <el-form-item label="商品名称" prop="name">
+          <el-input v-model="operData.name"></el-input>
+        </el-form-item>
         <el-form-item label="图片" prop="imageUrl">
           <el-image :src="operData.imageUrl" fit="contain" v-if="operData.imageUrl" class="upload-img"></el-image>
           <zzUpload @updateImage="updateImage" class="upload" />
         </el-form-item>
         <el-form-item label="价格（credits）" prop="credits">
           <el-input-number v-model="operData.credits" :min="1" :max="100000"></el-input-number>
+        </el-form-item>
+        <el-form-item label="商品介绍" prop="description">
+          <el-input autosize type="textarea" v-model="operData.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -81,12 +89,16 @@ export default {
         edit: '编辑商城礼物'
       },
       operData: {
+        name: '', // 名称
         imageUrl: '', // 图片
         credits: '', // 价格
+        description: '', // 介绍
       },
       operRules: {
+        name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
         imageUrl: [{ required: true, message: '图片不能为空', trigger: 'blur' }],
         credits: [{ required: true, message: '价格不能为空', trigger: 'blur' }],
+        description: [{ required: true, message: '介绍不能为空', trigger: 'blur' }],
       }
     }
   },
@@ -125,7 +137,7 @@ export default {
       this.$refs[formName].validate((valid) => {
 				if(valid) {
           if (this.operType == 'add') {
-            addGiftChatApi(this.operData).then(res => {
+            addGiftMallApi(this.operData).then(res => {
               this.$message({
                 message: res.repMsg,
                 type: 'success'
@@ -169,8 +181,10 @@ export default {
     },
     resetData() {
       this.operData = {
+        name: '', // 名称
         imageUrl: '', // 图片
         credits: '', // 价格
+        description: '', // 介绍
       }
     },
     updateImage(url) {
