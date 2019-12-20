@@ -95,7 +95,6 @@
 </template>
 
 <script>
-import zzUpload from '@/components/zz-upload'
 import { isValidateCode } from '@/utils/validate'
 import { getAuditApi, logAuditApi, updateAuditApi, getPromApi, updatePromApi } from '@/api/audit'
 export default {
@@ -134,9 +133,6 @@ export default {
       // 促销码
       promCode: '',
     }
-  },
-  components: {
-    zzUpload
   },
   created() {
     this.getList()

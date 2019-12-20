@@ -6,7 +6,7 @@
         :on-success="uploadSuccess"
         :before-upload="beforeAvatarUpload"
         :show-file-list="false"
-        accept=".png"
+        :accept="accept"
       >
       <el-button size="small" type="primary">选择图片</el-button>
   </el-upload>
@@ -28,6 +28,7 @@ export default {
       fileList: []
     }
   },
+  props: ['accept'],
   mounted() {
     this.getToken()
   },

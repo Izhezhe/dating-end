@@ -47,7 +47,7 @@
         </el-form-item>
         <el-form-item label="图片" prop="imageUrl">
           <el-image :src="operData.imageUrl" fit="contain" v-if="operData.imageUrl" class="upload-img"></el-image>
-          <zzUpload @updateImage="updateImage" class="upload" />
+          <zzUpload :accept="imgAccept" @updateImage="updateImage" class="upload" />
         </el-form-item>
         <el-form-item label="价格（credits）" prop="credits">
           <el-input-number v-model="operData.credits" :min="1" :max="100000"></el-input-number>
@@ -84,6 +84,7 @@ export default {
       // 新增、编辑
       operVisible: false,
       operType: 'add',
+      imgAccept: '.png, .jpg, .jpeg',
       operTitle: {
         add: '添加商城礼物',
         edit: '编辑商城礼物'
@@ -196,8 +197,7 @@ export default {
   }
 }
 </script>
-
-<style scopr>
+<style scoped>
   .upload-img {
     display: inline-block;
     vertical-align: middle;
