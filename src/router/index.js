@@ -30,6 +30,12 @@ export default new VueRouter({
           meta: {title: '文档管理', notCache: true},
         },
         {
+          path: '/income',
+          name: '收入管理',
+          component: () => import('@/views/income'),
+          meta: {title: '收入管理', notCache: true},
+        },
+        {
           path: '/audit',
           name: '审核管理',
           component: () => import('@/views/audit'),
