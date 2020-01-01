@@ -48,6 +48,8 @@
 
 <script>
 import { getIncomeApi } from '@/api/income'
+import { getToken } from '@/utils/auth'
+
 export default {
   name: 'income',
   data() {
@@ -93,11 +95,17 @@ export default {
     },
     exportList() {
       this.splitTime()
-      // window.location.href = process.env.BASE_API + '/api/user/balance/export' + JSON.stringify(this.filters)
-      axios.get(process.env.BASE_API + '/api/user/balance/export').then((res) => {
+      var url = process.env.BASE_API + '/api/user/balance/export';
+      axios.get(url,{
+          headers: {
+              'datingAuth': 'Bearer ' + getToken()
+          },
+          params: this.filters,
+          responseType: 'blob',
+        }).then((res) => {
         // 将文件流转成blob形式
-        const blob = new Blob([res], {type: 'application/vnd.ms-excel'})
-        let filename = 'test.xls'
+        const blob = new Blob([res.data])
+        const filename = decodeURI(res.headers['content-disposition'].split(';')[1]).replace('filename=',''); //获取文件名
         // 创建一个超链接，将文件流赋进去，然后实现这个超链接的单击事件
         const elink = document.createElement('a')
         elink.download = filename
