@@ -36,16 +36,28 @@ export default new VueRouter({
           meta: {title: '收入管理', notCache: true},
         },
         {
-          path: '/audit',
-          name: '审核管理',
-          component: () => import('@/views/audit'),
-          meta: {title: '审核管理', notCache: true},
-        },
-        {
           path: '/reset',
           name: '修改密码',
           component: () => import('@/views/login/reset'),
           meta: '修改密码'
+        },
+      ]
+    },
+    {
+      path: '/audit',
+      component: Layout,
+      children: [
+        {
+          path: 'service',
+          name: '客服审核',
+          component: () => import('@/views/audit/service'),
+          meta: {title: '客服审核', notCache: true},
+        },
+        {
+          path: 'receive',
+          name: '收货审核',
+          component: () => import('@/views/audit/receive'),
+          meta: {title: '收货审核', notCache: true},
         },
       ]
     },
