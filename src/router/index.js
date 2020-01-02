@@ -49,15 +49,15 @@ export default new VueRouter({
       children: [
         {
           path: 'service',
-          name: '客服审核',
+          name: '会员审核',
           component: () => import('@/views/audit/service'),
-          meta: {title: '客服审核', notCache: true},
+          meta: {title: '会员审核', notCache: true},
         },
         {
-          path: 'receive',
-          name: '收货审核',
-          component: () => import('@/views/audit/receive'),
-          meta: {title: '收货审核', notCache: true},
+          path: 'gift',
+          name: '礼物审核',
+          component: () => import('@/views/audit/gift'),
+          meta: {title: '礼物审核', notCache: true},
         },
       ]
     },

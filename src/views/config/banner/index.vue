@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <el-table ref="multipleTable" size="mini" :data="tableData" border stripe>
-        <el-table-column label="序号" prop="sort" width="70"></el-table-column>
+        <el-table-column label="排序序号" prop="sort" width="140"></el-table-column>
         <el-table-column label="图片">
           <template slot-scope="scope">
             <el-image :src="scope.row.imageUrl" fit="cover" class="upload-img" lazy></el-image>
@@ -32,7 +32,7 @@
     <!-- 新增、编辑 -->
     <el-dialog :title="operTitle[operType]" :visible.sync="operVisible">
       <el-form ref="operForm" :model="operData" :rules="operRules" label-width="150px">
-        <el-form-item label="序号" prop="sort">
+        <el-form-item label="排序序号" prop="sort">
           <el-input-number v-model="operData.sort" :min="1" :max="100000"></el-input-number>
         </el-form-item>
         <el-form-item label="图片" prop="imageUrl">
