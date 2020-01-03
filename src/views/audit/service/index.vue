@@ -73,7 +73,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="身份证正面">
-          <el-image v-if="operData.idcardFront != ''" :src="operData.idcardFront" fil="contain" class="idcard-image"></el-image>
+          <el-image :src="operData.idcardFront" fit="contain" class="idcard-image"></el-image>
         </el-form-item>
         <el-form-item label="身份证号" prop="idcardNum">
           <el-input v-model="operData.idcardNum"></el-input>
@@ -121,7 +121,9 @@ export default {
 
       // 查看
       operVisible: false,
-      operData: {},
+      operData: {
+        idcardFront: ''
+      },
       operRules: {
         name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
         status: [{ required: true, message: '状态不能为空', trigger: 'change' }],
@@ -203,10 +205,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
   .search-wrapper {
     span {
       display: inline-block;
     }
+  }
+  .idcard-image {
+    width: 300px;
   }
 </style>
