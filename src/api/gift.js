@@ -40,3 +40,20 @@ export function delGiftApi(data) {
     data
   })
 }
+
+
+// 获取礼物分类
+export function getMallTypeApi() {
+  return request({
+    url: '/gift/mall/type/all',
+    method: 'get',
+  })
+}
+// 新增礼物分类
+export function addMallTypeApi(data) {
+  return request({
+    url: '/gift/mall/type/save',
+    method: 'post',
+    data
+  })
+}

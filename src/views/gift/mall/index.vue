@@ -11,6 +11,7 @@
         </el-col>
         <el-col :span="12">
           <div class="fr">
+            <el-button size="small" type="primary" @click="typeVisible = true">礼物类型</el-button>
             <el-button size="small" type="primary" @click="handleAdd()">添加</el-button>
           </div>
         </el-col>
@@ -24,11 +25,12 @@
           </template>
         </el-table-column>
         <el-table-column label="价格（credits）" prop="credits"></el-table-column>
+        <el-table-column label="礼物类型" prop="typeName"></el-table-column>
         <el-table-column label="商品介绍" prop="description"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-link :underline="false" size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-link>
-            <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id)">删除</el-link>
+            <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id, 1)">删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -52,6 +54,11 @@
         <el-form-item label="价格（credits）" prop="credits">
           <el-input-number v-model="operData.credits" :min="1" :max="100000"></el-input-number>
         </el-form-item>
+        <el-form-item label="礼物分类" prop="credits">
+          <el-select v-model="operData.typeId">
+            <el-option v-for="item in typeData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="商品介绍" prop="description">
           <el-input autosize type="textarea" v-model="operData.description"></el-input>
         </el-form-item>
@@ -61,12 +68,47 @@
         <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 礼物类型 -->
+    <el-dialog title="礼物类型" :visible.sync="typeVisible">
+      <el-row :gutter="23" class="mb">
+        <el-col>
+          <el-button size="small" type="primary" @click="handleTypeAdd()">添加礼物类型</el-button>
+        </el-col>
+      </el-row>
+      <el-table ref="typeTable" size="mini" :data="typeData" border stripe>
+        <el-table-column label="序号" type="index" width="70"></el-table-column>
+        <el-table-column label="分类名称" prop="name"></el-table-column>
+        <el-table-column label="分类介绍" prop="description"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-link :underline="false" size="small" type="primary" @click="handleTypeEdit(scope.row)">编辑</el-link>
+            <el-link :underline="false" size="small" type="primary" @click="handleDelete(scope.row.id, 2)">删除</el-link>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+    <!-- 礼物新增、编辑 -->
+    <el-dialog :title="operTypeTitle[operTypeType]" :visible.sync="operTypeVisible">
+      <el-form ref="operTypeForm" :model="operTypeData" :rules="operTypeRules" label-width="150px">
+        <el-form-item label="分类名称" prop="name">
+          <el-input v-model="operTypeData.name"></el-input>
+        </el-form-item>
+        <el-form-item label="分类介绍" prop="description">
+          <el-input autosize type="textarea" v-model="operTypeData.description"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="operTypeClose()">取 消</el-button>
+        <el-button type="primary" @click="operTypeSave('operTypeForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import zzUpload from '@/components/zz-upload'
-import { getGiftApi, addGiftMallApi, editGiftApi, delGiftApi } from '@/api/gift'
+import { getGiftApi, addGiftMallApi, editGiftApi, delGiftApi, getMallTypeApi, addMallTypeApi } from '@/api/gift'
 export default {
   name: 'mall',
   data() {
@@ -87,24 +129,44 @@ export default {
       imgAccept: '.png, .jpg, .jpeg',
       operTitle: {
         add: '添加商城礼物',
-        edit: '编辑商城礼物'
+        edit: '编辑商城礼物',
       },
       operData: {
         name: '', // 名称
         imageUrl: '', // 图片
         credits: '', // 价格
+        typeId: '', // 礼物分类
         description: '', // 介绍
       },
       operRules: {
         name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
         imageUrl: [{ required: true, message: '图片不能为空', trigger: 'blur' }],
         credits: [{ required: true, message: '价格不能为空', trigger: 'blur' }],
+        typeId: [{ required: true, message: '礼物分类不能为空', trigger: 'blur' }],
         description: [{ required: true, message: '介绍不能为空', trigger: 'blur' }],
-      }
+      },
+      
+      // 礼物分类
+      typeVisible: false,
+      typeData: [],
+      operTypeVisible: false,
+      operTypeType: 'add',
+      operTypeTitle: {
+        add: '添加礼物类型',
+        edit: '编辑礼物类型',
+      },
+      operTypeData: {
+        name: '',
+        description: '',
+      },
+      operTypeRules: {
+        name: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+      },
     }
   },
   created() {
     this.getList()
+    this.getTypeList()
   },
   methods: {
     getList(b=false) {
@@ -125,7 +187,13 @@ export default {
     handleAdd() {
       this.operVisible = true
       this.operType = 'add'
-      this.resetData()
+      this.operData = {
+        name: '', // 名称
+        imageUrl: '', // 图片
+        credits: '', // 价格
+        typeId: '', // 礼物分类
+        description: '', // 介绍
+      }
     },
     // 编辑
     handleEdit(row) {
@@ -160,14 +228,18 @@ export default {
       })
     },
     // 删除
-    handleDelete(id) {
+    handleDelete(id, type) {
       this.$confirm('确定删除？', '提示', {type: 'warning'}).then(() => {
         delGiftApi({id: id}).then(res => {
           this.$message({
             message: res.repMsg,
             type: 'success'
           })
-          this.getList(true)
+          if (type == 1) {
+            this.getList(true)
+          } else {
+            this.getTypeList()
+          }
         })
       })
     },
@@ -180,17 +252,64 @@ export default {
       }
       this.getList(true)
     },
-    resetData() {
-      this.operData = {
-        name: '', // 名称
-        imageUrl: '', // 图片
-        credits: '', // 价格
-        description: '', // 介绍
-      }
-    },
     updateImage(url) {
       this.operData.imageUrl = url
-    }
+    },
+
+    // 礼物分类
+    getTypeList() {
+      getMallTypeApi().then(res => {
+        this.typeData = res.datas
+      })
+    },
+    // 礼物分类新增
+    handleTypeAdd() {
+      this.operTypeVisible = true
+      this.typeVisible = false
+      this.operTypeType = 'add'
+      this.operTypeData = {
+        name: '',
+        description: '',
+      }
+    },
+    // 礼物分类编辑
+    handleTypeEdit(row) {
+      this.operTypeVisible = true
+      this.typeVisible = false
+      this.operTypeType = 'edit'
+      this.operTypeData = JSON.parse(JSON.stringify(row))
+    },
+    // 礼物分类保存
+    operTypeSave(formName) {
+      this.$refs[formName].validate((valid) => {
+				if(valid) {
+          if (this.operTypeType == 'add') {
+            addMallTypeApi(this.operTypeData).then(res => {
+              this.$message({
+                message: res.repMsg,
+                type: 'success'
+              })
+              this.operTypeClose()
+              this.getTypeList()
+            })
+          } else {
+            editGiftApi(this.operTypeData).then(res => {
+              this.$message({
+                message: res.repMsg,
+                type: 'success'
+              })
+              this.operTypeClose()
+              this.getTypeList()
+            })
+          }
+        }
+      })
+    },
+    // 礼物分类取消
+    operTypeClose() {
+      this.operTypeVisible = false
+      this.typeVisible = true
+    },
   },
   components: {
     zzUpload
