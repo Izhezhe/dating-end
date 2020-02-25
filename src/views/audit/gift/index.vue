@@ -185,7 +185,7 @@ export default {
       })
     },
     updateProm() {
-      updatePromApi().then(res => {
+      updatePromApi().then(res => { 
         this.promCode = res.datas
       })
     }
