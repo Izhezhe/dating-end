@@ -12,7 +12,7 @@
         <el-table-column label="排序序号" prop="sort" width="140"></el-table-column>
         <el-table-column label="图片">
           <template slot-scope="scope">
-            <el-image :src="scope.row.imageUrl" fit="cover" class="upload-img" lazy></el-image>
+            <el-image :src="scope.row.imageUrl" fit="contain" class="upload-img" lazy></el-image>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -36,7 +36,7 @@
           <el-input-number v-model="operData.sort" :min="1" :max="100000"></el-input-number>
         </el-form-item>
         <el-form-item label="图片" prop="imageUrl">
-          <el-image :src="operData.imageUrl" fit="cover" v-if="operData.imageUrl" class="upload-img"></el-image>
+          <el-image :src="operData.imageUrl" fit="contain" v-if="operData.imageUrl" class="upload-img"></el-image>
           <zzUpload :accept="imgAccept" @updateImage="updateImage" class="upload" />
           <p style="color: red;">请上传 1150px * 300px 的图片</p>
         </el-form-item>
