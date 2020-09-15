@@ -1,6 +1,6 @@
 <template>
   <el-upload
-        :action="domain"
+        :action="website.domain"
         :data="QiniuData"
         :on-error="uploadError"
         :on-success="uploadSuccess"
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'upload',
   data() {
@@ -22,13 +23,14 @@ export default {
         // key: "", //图片名字处理
         token: "" //七牛云token
       },
-      domain: "https://upload-z1.qiniup.com/", // 七牛云的上传地址（华南区）
-      qiniuaddr: "http://image.zhzhao.top/", // 七牛云的图片外链地址
       uploadPicUrl: "", //提交到后台图片地址
       fileList: []
     }
   },
   props: ['accept'],
+  computed: {
+    ...mapGetters(['website'])
+  },
   mounted() {
     this.getToken()
   },
@@ -42,15 +44,17 @@ export default {
       // this.QiniuData.key = `upload_pic_${file.name}`;
     },
     uploadSuccess(response, file, fileList) {
-      this.uploadPicUrl = `${this.qiniuaddr}${response.key}`;
+      this.uploadPicUrl = `${this.website.qiniuaddr}${response.key}`;
       this.$emit('updateImage', this.uploadPicUrl);
     },
     uploadError(err, file, fileList) {
       this.$message({
-        message: "上传出错，请重试！",
-        type: "error",
-        center: true
-      });
+        message: 'upload error',
+        type: 'error'
+      })
+      this.$store.dispatch('LogOut').then(() => {
+        this.$router.push({ path: '/login' }) // In order to re-instantiate the vue-router object to avoid bugs
+      })
     },
     getToken() {
       // 请求后台拿七牛云token

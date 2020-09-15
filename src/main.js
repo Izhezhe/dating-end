@@ -13,6 +13,9 @@ Vue.config.productionTip = false
 Vue.use(VueCountUp)
 Vue.component('icon', Icon)
 
+import VueCropper from 'vue-cropper'
+Vue.use(VueCropper)
+
 new Vue({
   router,
   store,

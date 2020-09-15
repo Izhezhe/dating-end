@@ -37,7 +37,7 @@
         </el-form-item>
         <el-form-item label="图片" prop="imageUrl">
           <el-image :src="operData.imageUrl" fit="contain" v-if="operData.imageUrl" class="upload-img"></el-image>
-          <zzUpload :accept="imgAccept" @updateImage="updateImage" class="upload" />
+          <el-button size="small" type="primary" @click="openBannerCropper()">选择图片</el-button>
           <p style="color: red;">请上传 1150px * 300px 的图片</p>
         </el-form-item>
       </el-form>
@@ -46,11 +46,13 @@
         <el-button type="primary" @click="operSave('operForm')">确 定</el-button>
       </span>
     </el-dialog>
+
+    <zzCropper ref="vueBannerCropper" @updateImage="updateImage"></zzCropper>
   </div>
 </template>
 
 <script>
-import zzUpload from '@/components/zz-upload'
+import zzCropper from '@/components/zz-cropper/banner'
 import { getBannerApi, addBannerApi, editBannerApi, delBannerApi } from '@/api/config'
 export default {
   name: 'chat',
@@ -153,12 +155,15 @@ export default {
         imageUrl: '', // 图片
       }
     },
+    openBannerCropper() {
+      this.$refs.vueBannerCropper.closeModel(true)
+    },
     updateImage(url) {
       this.operData.imageUrl = url
     }
   },
   components: {
-    zzUpload
+    zzCropper
   }
 }
 </script>
